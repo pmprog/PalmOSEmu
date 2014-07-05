@@ -1,0 +1,16 @@
+FileInput.o: ../../SrcUnix/espws-2.0/FileInput.cxx \
+ /media/linux/fltk-1.1.10/binaries/include/FL/Fl.H \
+ /media/linux/fltk-1.1.10/binaries/include/FL/Enumerations.H \
+ /media/linux/fltk-1.1.10/binaries/include/FL/Fl_Export.H \
+ ../../SrcUnix/espws-2.0/FileInput.h \
+ /media/linux/fltk-1.1.10/binaries/include/FL/Fl_Input.H \
+ /media/linux/fltk-1.1.10/binaries/include/FL/Fl_Input_.H \
+ /media/linux/fltk-1.1.10/binaries/include/FL/Fl_Widget.H
+../../SrcUnix/espws-2.0/FileInput.cxx :
+/media/linux/fltk-1.1.10/binaries/include/FL/Fl.H :
+/media/linux/fltk-1.1.10/binaries/include/FL/Enumerations.H :
+/media/linux/fltk-1.1.10/binaries/include/FL/Fl_Export.H :
+../../SrcUnix/espws-2.0/FileInput.h :
+/media/linux/fltk-1.1.10/binaries/include/FL/Fl_Input.H :
+/media/linux/fltk-1.1.10/binaries/include/FL/Fl_Input_.H :
+/media/linux/fltk-1.1.10/binaries/include/FL/Fl_Widget.H :

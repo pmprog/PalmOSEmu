@@ -1,0 +1,425 @@
+EmRegsEZPalmVIIx.o: ../SrcShared/Hardware/EmRegsEZPalmVIIx.cpp \
+ ../SrcShared/EmCommon.h ../SrcShared/Switches.h \
+ /mnt/utmp/codeblocks/usr/include/endian.h \
+ /mnt/utmp/codeblocks/usr/include/features.h \
+ /mnt/utmp/codeblocks/usr/include/sys/cdefs.h \
+ /mnt/utmp/codeblocks/usr/include/bits/wordsize.h \
+ /mnt/utmp/codeblocks/usr/include/gnu/stubs.h \
+ /mnt/utmp/codeblocks/usr/include/bits/endian.h \
+ /mnt/utmp/codeblocks/usr/include/bits/byteswap.h ../SrcShared/EmTypes.h \
+ ../SrcUnix/EmCommonUnix.h ../SrcShared/Palm.h ../SrcShared/PalmPack.h \
+ ../SrcShared/Palm/Platform/Incs/BuildDefines.h \
+ ../SrcShared/Palm/Platform/Incs/PalmTypes.h \
+ ../SrcShared/Palm/Platform/Incs/BuildDefaults.h \
+ ../SrcShared/Palm/Platform/Incs/Core/System/Bitmap.h \
+ ../SrcShared/Palm/Platform/Incs/Core/CoreTraps.h \
+ ../SrcShared/PalmOptErrorCheckLevel.h \
+ ../SrcShared/Palm/Platform/Incs/Core/System/CharAttr.h \
+ ../SrcShared/Palm/Platform/Incs/Core/System/Chars.h \
+ ../SrcShared/Palm/Platform/Incs/Core/System/Crc.h \
+ ../SrcShared/Palm/Platform/Incs/Core/System/DataMgr.h \
+ ../SrcShared/Palm/Platform/Incs/Core/System/ErrorBase.h \
+ /mnt/utmp/codeblocks/usr/include/setjmp.h \
+ /mnt/utmp/codeblocks/usr/include/bits/setjmp.h \
+ /mnt/utmp/codeblocks/usr/include/bits/sigset.h \
+ ../SrcShared/Palm/Platform/Incs/Core/System/MemoryMgr.h \
+ ../SrcShared/Palm/Platform/Incs/Core/System/DateTime.h \
+ ../SrcShared/Palm/Platform/Incs/Core/System/FeatureMgr.h \
+ ../SrcShared/Palm/Platform/Incs/Core/System/Font.h \
+ ../SrcShared/Palm/Platform/Incs/Core/System/IntlMgr.h \
+ ../SrcShared/Palm/Platform/Incs/Core/System/KeyMgr.h \
+ ../SrcShared/Palm/Platform/Incs/Core/System/Localize.h \
+ ../SrcShared/Palm/Platform/Incs/Core/System/NetBitUtils.h \
+ ../SrcShared/Palm/Platform/Incs/Core/System/NetMgr.h \
+ ../SrcShared/Palm/Platform/Incs/Libraries/LibTraps.h \
+ ../SrcShared/Palm/Platform/Incs/Core/System/SysEvent.h \
+ ../SrcShared/Palm/Platform/Incs/Core/System/Rect.h \
+ ../SrcShared/Palm/Platform/Incs/Core/System/Window.h \
+ ../SrcShared/Palm/Platform/Incs/Core/System/OverlayMgr.h \
+ ../SrcShared/Palm/Platform/Incs/Core/System/PalmLocale.h \
+ ../SrcShared/Palm/Platform/Incs/Core/System/PenMgr.h \
+ ../SrcShared/Palm/Platform/Incs/Core/System/Preferences.h \
+ ../SrcShared/Palm/Platform/Incs/Core/System/SystemMgr.h \
+ ../SrcShared/Palm/Platform/Incs/Core/System/SystemResources.h \
+ ../SrcShared/Palm/Platform/Incs/Core/UI/InsPoint.h \
+ ../SrcShared/Palm/Platform/Incs/Core/UI/Event.h \
+ ../SrcShared/Palm/Platform/Incs/Core/System/LocaleMgr.h \
+ ../SrcShared/Palm/Platform/Incs/Core/UI/AttentionMgr.h \
+ ../SrcShared/Palm/Platform/Incs/Core/System/SerialMgr.h \
+ ../SrcShared/Palm/Platform/Incs/Core/System/SerialLinkMgr.h \
+ ../SrcShared/Palm/Platform/Incs/Core/System/SoundMgr.h \
+ ../SrcShared/Palm/Platform/Incs/Core/System/SysEvtMgr.h \
+ ../SrcShared/Palm/Platform/Incs/Core/System/SystemPkt.h \
+ ../SrcShared/Palm/Platform/Incs/Core/System/TextMgr.h \
+ ../SrcShared/Palm/Platform/Incs/Core/UI/Control.h \
+ ../SrcShared/Palm/Platform/Incs/Core/UI/FatalAlert.h \
+ ../SrcShared/Palm/Platform/Incs/Core/UI/Field.h \
+ ../SrcShared/Palm/Platform/Incs/Core/UI/Find.h \
+ ../SrcShared/Palm/Platform/Incs/Core/UI/Form.h \
+ ../SrcShared/Palm/Platform/Incs/Core/UI/List.h \
+ ../SrcShared/Palm/Platform/Incs/Core/UI/ScrollBar.h \
+ ../SrcShared/Palm/Platform/Incs/Core/UI/Table.h \
+ ../SrcShared/Palm/Platform/Incs/Core/UI/UIResources.h \
+ ../SrcShared/Palm/Platform/Incs/Core/Hardware/M68KHwr.h \
+ ../SrcShared/Palm/Platform/Core/System/IncsPrv/DebugPrv.h \
+ ../SrcShared/Palm/Platform/Core/System/IncsPrv/SystemPrv.h \
+ ../SrcShared/Palm/Platform/Core/System/IncsPrv/Globals.h \
+ ../SrcShared/Palm/Platform/Core/System/IncsPrv/SerialLinkPrv.h \
+ ../SrcShared/Palm/Platform/Core/System/IncsPrv/MemoryPrv.h \
+ ../SrcShared/Palm/Platform/Core/System/IncsPrv/DebugPrv.h \
+ ../SrcShared/Palm/Platform/Core/Hardware/IncsPrv/Hardware.h \
+ ../SrcShared/Palm/Platform/Incs/Core/Hardware/HAL.h \
+ ../SrcShared/Palm/Platform/Core/System/IncsPrv/DataPrv.h \
+ ../SrcShared/Palm/Platform/Incs/Core/System/DLCommon.h \
+ ../SrcShared/Palm/Platform/Incs/Core/System/DLServer.h \
+ ../SrcShared/Palm/Device/EZAustin/IncsPrv/SED1375Hwr.h \
+ ../SrcShared/Palm/Platform/Core/Hardware/IncsPrv/M68328Hwr.h \
+ ../SrcShared/Palm/Platform/Core/Hardware/IncsPrv/M68EZ328Hwr.h \
+ ../SrcShared/Palm/Platform/Core/Hardware/IncsPrv/M68VZ328Hwr.h \
+ ../SrcShared/Palm/Platform/Core/Hardware/IncsPrv/M68SZ328Hwr.h \
+ ../SrcShared/PalmPackPop.h /mnt/utmp/codeblocks/usr/include/sys/types.h \
+ /mnt/utmp/codeblocks/usr/include/bits/types.h \
+ /mnt/utmp/codeblocks/usr/lib/gcc/armv7l-unknown-linux-gnueabi/4.8.2/include/stddef.h \
+ /mnt/utmp/codeblocks/usr/include/bits/typesizes.h \
+ /mnt/utmp/codeblocks/usr/include/time.h \
+ /mnt/utmp/codeblocks/usr/include/sys/select.h \
+ /mnt/utmp/codeblocks/usr/include/bits/select.h \
+ /mnt/utmp/codeblocks/usr/include/bits/time.h \
+ /mnt/utmp/codeblocks/usr/include/sys/sysmacros.h \
+ /mnt/utmp/codeblocks/usr/include/bits/pthreadtypes.h \
+ /mnt/utmp/codeblocks/usr/include/sys/socket.h \
+ /mnt/utmp/codeblocks/usr/include/sys/uio.h \
+ /mnt/utmp/codeblocks/usr/include/bits/uio.h \
+ /mnt/utmp/codeblocks/usr/include/bits/socket.h \
+ /mnt/utmp/codeblocks/usr/include/bits/sockaddr.h \
+ /mnt/utmp/codeblocks/usr/include/asm/socket.h \
+ /mnt/utmp/codeblocks/usr/include/asm/sockios.h ../SrcShared/EmAssert.h \
+ ../SrcShared/Hardware/EmRegsEZPalmVIIx.h \
+ ../SrcShared/Hardware/EmRegsEZ.h ../SrcShared/Hardware/EmHAL.h \
+ ../SrcShared/Skins.h ../SrcShared/EmDevice.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/vector \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/stl_algobase.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/armv7l-unknown-linux-gnueabi/bits/c++config.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/armv7l-unknown-linux-gnueabi/bits/os_defines.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/armv7l-unknown-linux-gnueabi/bits/cpu_defines.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/functexcept.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/exception_defines.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/cpp_type_traits.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/ext/type_traits.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/ext/numeric_traits.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/stl_pair.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/move.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/concept_check.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/stl_iterator_base_types.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/stl_iterator_base_funcs.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/debug/debug.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/stl_iterator.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/allocator.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/armv7l-unknown-linux-gnueabi/bits/c++allocator.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/ext/new_allocator.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/new \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/exception \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/atomic_lockfree_defines.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/memoryfwd.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/stl_construct.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/ext/alloc_traits.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/stl_uninitialized.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/stl_vector.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/stl_bvector.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/range_access.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/vector.tcc \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/utility \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/stl_relops.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/string \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/stringfwd.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/char_traits.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/postypes.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/cwchar \
+ /mnt/utmp/codeblocks/usr/include/wchar.h \
+ /mnt/utmp/codeblocks/usr/include/stdio.h \
+ /mnt/utmp/codeblocks/usr/lib/gcc/armv7l-unknown-linux-gnueabi/4.8.2/include/stdarg.h \
+ /mnt/utmp/codeblocks/usr/include/bits/wchar.h \
+ /mnt/utmp/codeblocks/usr/include/xlocale.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/localefwd.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/armv7l-unknown-linux-gnueabi/bits/c++locale.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/clocale \
+ /mnt/utmp/codeblocks/usr/include/locale.h \
+ /mnt/utmp/codeblocks/usr/include/bits/locale.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/iosfwd \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/cctype \
+ /mnt/utmp/codeblocks/usr/include/ctype.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/ostream_insert.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/cxxabi_forced.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/stl_function.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/backward/binders.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/basic_string.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/ext/atomicity.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/armv7l-unknown-linux-gnueabi/bits/gthr.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/armv7l-unknown-linux-gnueabi/bits/gthr-default.h \
+ /mnt/utmp/codeblocks/usr/include/pthread.h \
+ /mnt/utmp/codeblocks/usr/include/sched.h \
+ /mnt/utmp/codeblocks/usr/include/bits/sched.h \
+ /mnt/utmp/codeblocks/usr/include/signal.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/armv7l-unknown-linux-gnueabi/bits/atomic_word.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/basic_string.tcc \
+ ../SrcShared/EmRect.h ../SrcShared/EmPoint.h ../SrcShared/EmStructs.h \
+ ../SrcShared/EmFileRef.h ../SrcShared/EmDirRef.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/deque \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/stl_deque.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/deque.tcc \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/map \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/stl_tree.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/stl_map.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/stl_multimap.h \
+ ../SrcShared/Hardware/EmRegs.h ../SrcShared/EmStructs.h \
+ ../SrcShared/Hardware/EmUARTDragonball.h \
+ ../SrcShared/EmThreadSafeQueue.h ../SrcShared/omnithread/omnithread.h \
+ ../SrcShared/omnithread/posix.h ../SrcShared/Hardware/EmRegsEZPrv.h \
+ ../SrcShared/Hardware/EmRegsPrv.h ../SrcShared/Hardware/EmMemory.h \
+ ../SrcShared/Switches.h ../SrcShared/EmTypes.h ../SrcShared/EmAssert.h \
+ ../SrcShared/UAE/sysconfig.h /mnt/utmp/codeblocks/usr/include/string.h \
+ ../SrcShared/EmDevice.h ../SrcShared/EmSession.h ../SrcShared/EmDlg.h \
+ ../SrcShared/EmFileImport.h ../SrcShared/EmTransport.h \
+ ../SrcShared/EmTransportSerial.h ../SrcShared/Logging.h \
+ ../SrcShared/Hordes.h ../SrcShared/CGremlins.h ../SrcShared/EmStream.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/list \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/stl_list.h \
+ /mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/list.tcc \
+ ../SrcShared/Miscellaneous.h ../SrcShared/PreferenceMgr.h \
+ ../SrcShared/Hardware/EmHAL.h ../SrcShared/Skins.h \
+ /mnt/utmp/codeblocks/usr/include/libio.h \
+ /mnt/utmp/codeblocks/usr/include/_G_config.h \
+ /mnt/utmp/codeblocks/usr/include/bits/stdio_lim.h \
+ /mnt/utmp/codeblocks/usr/include/bits/sys_errlist.h \
+ /mnt/utmp/codeblocks/usr/include/bits/stdio.h \
+ ../SrcShared/EmThreadSafeQueue.h \
+ ../SrcShared/Hardware/EmSPISlaveADS784x.h \
+ ../SrcShared/Hardware/EmSPISlave.h ../SrcShared/PalmPack.h \
+ ../SrcShared/Palm/Device/EZSumo/IncsPrv/HardwareEZ.h \
+ ../SrcShared/PalmPackPop.h
+../SrcShared/Hardware/EmRegsEZPalmVIIx.cpp :
+../SrcShared/EmCommon.h :
+../SrcShared/Switches.h :
+/mnt/utmp/codeblocks/usr/include/endian.h :
+/mnt/utmp/codeblocks/usr/include/features.h :
+/mnt/utmp/codeblocks/usr/include/sys/cdefs.h :
+/mnt/utmp/codeblocks/usr/include/bits/wordsize.h :
+/mnt/utmp/codeblocks/usr/include/gnu/stubs.h :
+/mnt/utmp/codeblocks/usr/include/bits/endian.h :
+/mnt/utmp/codeblocks/usr/include/bits/byteswap.h :
+../SrcShared/EmTypes.h :
+../SrcUnix/EmCommonUnix.h :
+../SrcShared/Palm.h :
+../SrcShared/PalmPack.h :
+../SrcShared/Palm/Platform/Incs/BuildDefines.h :
+../SrcShared/Palm/Platform/Incs/PalmTypes.h :
+../SrcShared/Palm/Platform/Incs/BuildDefaults.h :
+../SrcShared/Palm/Platform/Incs/Core/System/Bitmap.h :
+../SrcShared/Palm/Platform/Incs/Core/CoreTraps.h :
+../SrcShared/PalmOptErrorCheckLevel.h :
+../SrcShared/Palm/Platform/Incs/Core/System/CharAttr.h :
+../SrcShared/Palm/Platform/Incs/Core/System/Chars.h :
+../SrcShared/Palm/Platform/Incs/Core/System/Crc.h :
+../SrcShared/Palm/Platform/Incs/Core/System/DataMgr.h :
+../SrcShared/Palm/Platform/Incs/Core/System/ErrorBase.h :
+/mnt/utmp/codeblocks/usr/include/setjmp.h :
+/mnt/utmp/codeblocks/usr/include/bits/setjmp.h :
+/mnt/utmp/codeblocks/usr/include/bits/sigset.h :
+../SrcShared/Palm/Platform/Incs/Core/System/MemoryMgr.h :
+../SrcShared/Palm/Platform/Incs/Core/System/DateTime.h :
+../SrcShared/Palm/Platform/Incs/Core/System/FeatureMgr.h :
+../SrcShared/Palm/Platform/Incs/Core/System/Font.h :
+../SrcShared/Palm/Platform/Incs/Core/System/IntlMgr.h :
+../SrcShared/Palm/Platform/Incs/Core/System/KeyMgr.h :
+../SrcShared/Palm/Platform/Incs/Core/System/Localize.h :
+../SrcShared/Palm/Platform/Incs/Core/System/NetBitUtils.h :
+../SrcShared/Palm/Platform/Incs/Core/System/NetMgr.h :
+../SrcShared/Palm/Platform/Incs/Libraries/LibTraps.h :
+../SrcShared/Palm/Platform/Incs/Core/System/SysEvent.h :
+../SrcShared/Palm/Platform/Incs/Core/System/Rect.h :
+../SrcShared/Palm/Platform/Incs/Core/System/Window.h :
+../SrcShared/Palm/Platform/Incs/Core/System/OverlayMgr.h :
+../SrcShared/Palm/Platform/Incs/Core/System/PalmLocale.h :
+../SrcShared/Palm/Platform/Incs/Core/System/PenMgr.h :
+../SrcShared/Palm/Platform/Incs/Core/System/Preferences.h :
+../SrcShared/Palm/Platform/Incs/Core/System/SystemMgr.h :
+../SrcShared/Palm/Platform/Incs/Core/System/SystemResources.h :
+../SrcShared/Palm/Platform/Incs/Core/UI/InsPoint.h :
+../SrcShared/Palm/Platform/Incs/Core/UI/Event.h :
+../SrcShared/Palm/Platform/Incs/Core/System/LocaleMgr.h :
+../SrcShared/Palm/Platform/Incs/Core/UI/AttentionMgr.h :
+../SrcShared/Palm/Platform/Incs/Core/System/SerialMgr.h :
+../SrcShared/Palm/Platform/Incs/Core/System/SerialLinkMgr.h :
+../SrcShared/Palm/Platform/Incs/Core/System/SoundMgr.h :
+../SrcShared/Palm/Platform/Incs/Core/System/SysEvtMgr.h :
+../SrcShared/Palm/Platform/Incs/Core/System/SystemPkt.h :
+../SrcShared/Palm/Platform/Incs/Core/System/TextMgr.h :
+../SrcShared/Palm/Platform/Incs/Core/UI/Control.h :
+../SrcShared/Palm/Platform/Incs/Core/UI/FatalAlert.h :
+../SrcShared/Palm/Platform/Incs/Core/UI/Field.h :
+../SrcShared/Palm/Platform/Incs/Core/UI/Find.h :
+../SrcShared/Palm/Platform/Incs/Core/UI/Form.h :
+../SrcShared/Palm/Platform/Incs/Core/UI/List.h :
+../SrcShared/Palm/Platform/Incs/Core/UI/ScrollBar.h :
+../SrcShared/Palm/Platform/Incs/Core/UI/Table.h :
+../SrcShared/Palm/Platform/Incs/Core/UI/UIResources.h :
+../SrcShared/Palm/Platform/Incs/Core/Hardware/M68KHwr.h :
+../SrcShared/Palm/Platform/Core/System/IncsPrv/DebugPrv.h :
+../SrcShared/Palm/Platform/Core/System/IncsPrv/SystemPrv.h :
+../SrcShared/Palm/Platform/Core/System/IncsPrv/Globals.h :
+../SrcShared/Palm/Platform/Core/System/IncsPrv/SerialLinkPrv.h :
+../SrcShared/Palm/Platform/Core/System/IncsPrv/MemoryPrv.h :
+../SrcShared/Palm/Platform/Core/System/IncsPrv/DebugPrv.h :
+../SrcShared/Palm/Platform/Core/Hardware/IncsPrv/Hardware.h :
+../SrcShared/Palm/Platform/Incs/Core/Hardware/HAL.h :
+../SrcShared/Palm/Platform/Core/System/IncsPrv/DataPrv.h :
+../SrcShared/Palm/Platform/Incs/Core/System/DLCommon.h :
+../SrcShared/Palm/Platform/Incs/Core/System/DLServer.h :
+../SrcShared/Palm/Device/EZAustin/IncsPrv/SED1375Hwr.h :
+../SrcShared/Palm/Platform/Core/Hardware/IncsPrv/M68328Hwr.h :
+../SrcShared/Palm/Platform/Core/Hardware/IncsPrv/M68EZ328Hwr.h :
+../SrcShared/Palm/Platform/Core/Hardware/IncsPrv/M68VZ328Hwr.h :
+../SrcShared/Palm/Platform/Core/Hardware/IncsPrv/M68SZ328Hwr.h :
+../SrcShared/PalmPackPop.h :
+/mnt/utmp/codeblocks/usr/include/sys/types.h :
+/mnt/utmp/codeblocks/usr/include/bits/types.h :
+/mnt/utmp/codeblocks/usr/lib/gcc/armv7l-unknown-linux-gnueabi/4.8.2/include/stddef.h :
+/mnt/utmp/codeblocks/usr/include/bits/typesizes.h :
+/mnt/utmp/codeblocks/usr/include/time.h :
+/mnt/utmp/codeblocks/usr/include/sys/select.h :
+/mnt/utmp/codeblocks/usr/include/bits/select.h :
+/mnt/utmp/codeblocks/usr/include/bits/time.h :
+/mnt/utmp/codeblocks/usr/include/sys/sysmacros.h :
+/mnt/utmp/codeblocks/usr/include/bits/pthreadtypes.h :
+/mnt/utmp/codeblocks/usr/include/sys/socket.h :
+/mnt/utmp/codeblocks/usr/include/sys/uio.h :
+/mnt/utmp/codeblocks/usr/include/bits/uio.h :
+/mnt/utmp/codeblocks/usr/include/bits/socket.h :
+/mnt/utmp/codeblocks/usr/include/bits/sockaddr.h :
+/mnt/utmp/codeblocks/usr/include/asm/socket.h :
+/mnt/utmp/codeblocks/usr/include/asm/sockios.h :
+../SrcShared/EmAssert.h :
+../SrcShared/Hardware/EmRegsEZPalmVIIx.h :
+../SrcShared/Hardware/EmRegsEZ.h :
+../SrcShared/Hardware/EmHAL.h :
+../SrcShared/Skins.h :
+../SrcShared/EmDevice.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/vector :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/stl_algobase.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/armv7l-unknown-linux-gnueabi/bits/c++config.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/armv7l-unknown-linux-gnueabi/bits/os_defines.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/armv7l-unknown-linux-gnueabi/bits/cpu_defines.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/functexcept.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/exception_defines.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/cpp_type_traits.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/ext/type_traits.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/ext/numeric_traits.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/stl_pair.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/move.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/concept_check.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/stl_iterator_base_types.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/stl_iterator_base_funcs.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/debug/debug.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/stl_iterator.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/allocator.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/armv7l-unknown-linux-gnueabi/bits/c++allocator.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/ext/new_allocator.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/new :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/exception :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/atomic_lockfree_defines.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/memoryfwd.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/stl_construct.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/ext/alloc_traits.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/stl_uninitialized.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/stl_vector.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/stl_bvector.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/range_access.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/vector.tcc :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/utility :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/stl_relops.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/string :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/stringfwd.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/char_traits.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/postypes.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/cwchar :
+/mnt/utmp/codeblocks/usr/include/wchar.h :
+/mnt/utmp/codeblocks/usr/include/stdio.h :
+/mnt/utmp/codeblocks/usr/lib/gcc/armv7l-unknown-linux-gnueabi/4.8.2/include/stdarg.h :
+/mnt/utmp/codeblocks/usr/include/bits/wchar.h :
+/mnt/utmp/codeblocks/usr/include/xlocale.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/localefwd.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/armv7l-unknown-linux-gnueabi/bits/c++locale.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/clocale :
+/mnt/utmp/codeblocks/usr/include/locale.h :
+/mnt/utmp/codeblocks/usr/include/bits/locale.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/iosfwd :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/cctype :
+/mnt/utmp/codeblocks/usr/include/ctype.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/ostream_insert.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/cxxabi_forced.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/stl_function.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/backward/binders.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/basic_string.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/ext/atomicity.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/armv7l-unknown-linux-gnueabi/bits/gthr.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/armv7l-unknown-linux-gnueabi/bits/gthr-default.h :
+/mnt/utmp/codeblocks/usr/include/pthread.h :
+/mnt/utmp/codeblocks/usr/include/sched.h :
+/mnt/utmp/codeblocks/usr/include/bits/sched.h :
+/mnt/utmp/codeblocks/usr/include/signal.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/armv7l-unknown-linux-gnueabi/bits/atomic_word.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/basic_string.tcc :
+../SrcShared/EmRect.h :
+../SrcShared/EmPoint.h :
+../SrcShared/EmStructs.h :
+../SrcShared/EmFileRef.h :
+../SrcShared/EmDirRef.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/deque :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/stl_deque.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/deque.tcc :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/map :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/stl_tree.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/stl_map.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/stl_multimap.h :
+../SrcShared/Hardware/EmRegs.h :
+../SrcShared/EmStructs.h :
+../SrcShared/Hardware/EmUARTDragonball.h :
+../SrcShared/EmThreadSafeQueue.h :
+../SrcShared/omnithread/omnithread.h :
+../SrcShared/omnithread/posix.h :
+../SrcShared/Hardware/EmRegsEZPrv.h :
+../SrcShared/Hardware/EmRegsPrv.h :
+../SrcShared/Hardware/EmMemory.h :
+../SrcShared/Switches.h :
+../SrcShared/EmTypes.h :
+../SrcShared/EmAssert.h :
+../SrcShared/UAE/sysconfig.h :
+/mnt/utmp/codeblocks/usr/include/string.h :
+../SrcShared/EmDevice.h :
+../SrcShared/EmSession.h :
+../SrcShared/EmDlg.h :
+../SrcShared/EmFileImport.h :
+../SrcShared/EmTransport.h :
+../SrcShared/EmTransportSerial.h :
+../SrcShared/Logging.h :
+../SrcShared/Hordes.h :
+../SrcShared/CGremlins.h :
+../SrcShared/EmStream.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/list :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/stl_list.h :
+/mnt/utmp/codeblocks/usr/include/c++/4.8.2/bits/list.tcc :
+../SrcShared/Miscellaneous.h :
+../SrcShared/PreferenceMgr.h :
+../SrcShared/Hardware/EmHAL.h :
+../SrcShared/Skins.h :
+/mnt/utmp/codeblocks/usr/include/libio.h :
+/mnt/utmp/codeblocks/usr/include/_G_config.h :
+/mnt/utmp/codeblocks/usr/include/bits/stdio_lim.h :
+/mnt/utmp/codeblocks/usr/include/bits/sys_errlist.h :
+/mnt/utmp/codeblocks/usr/include/bits/stdio.h :
+../SrcShared/EmThreadSafeQueue.h :
+../SrcShared/Hardware/EmSPISlaveADS784x.h :
+../SrcShared/Hardware/EmSPISlave.h :
+../SrcShared/PalmPack.h :
+../SrcShared/Palm/Device/EZSumo/IncsPrv/HardwareEZ.h :
+../SrcShared/PalmPackPop.h :

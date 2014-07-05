@@ -1,0 +1,12 @@
+Crc.o: ../SrcShared/Palm/Platform/Core/System/Src/Crc.c \
+ ../SrcShared/Palm/Platform/Incs/BuildDefines.h \
+ ../SrcShared/Palm/Platform/Incs/PalmTypes.h \
+ ../SrcShared/Palm/Platform/Incs/BuildDefaults.h \
+ ../SrcShared/Palm/Platform/Incs/Core/System/Crc.h \
+ ../SrcShared/Palm/Platform/Incs/Core/CoreTraps.h
+../SrcShared/Palm/Platform/Core/System/Src/Crc.c :
+../SrcShared/Palm/Platform/Incs/BuildDefines.h :
+../SrcShared/Palm/Platform/Incs/PalmTypes.h :
+../SrcShared/Palm/Platform/Incs/BuildDefaults.h :
+../SrcShared/Palm/Platform/Incs/Core/System/Crc.h :
+../SrcShared/Palm/Platform/Incs/Core/CoreTraps.h :

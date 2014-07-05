@@ -1,0 +1,51 @@
+trees.o: ../../SrcShared/Gzip/trees.c \
+ /mnt/utmp/codeblocks/usr/include/ctype.h \
+ /mnt/utmp/codeblocks/usr/include/features.h \
+ /mnt/utmp/codeblocks/usr/include/sys/cdefs.h \
+ /mnt/utmp/codeblocks/usr/include/bits/wordsize.h \
+ /mnt/utmp/codeblocks/usr/include/gnu/stubs.h \
+ /mnt/utmp/codeblocks/usr/include/bits/types.h \
+ /mnt/utmp/codeblocks/usr/lib/gcc/armv7l-unknown-linux-gnueabi/4.8.2/include/stddef.h \
+ /mnt/utmp/codeblocks/usr/include/bits/typesizes.h \
+ /mnt/utmp/codeblocks/usr/include/endian.h \
+ /mnt/utmp/codeblocks/usr/include/bits/endian.h \
+ /mnt/utmp/codeblocks/usr/include/bits/byteswap.h \
+ ../../SrcShared/Gzip/tailor.h ../../SrcShared/Gzip/gzip.h \
+ /mnt/utmp/codeblocks/usr/include/stdio.h \
+ /mnt/utmp/codeblocks/usr/include/libio.h \
+ /mnt/utmp/codeblocks/usr/include/_G_config.h \
+ /mnt/utmp/codeblocks/usr/include/wchar.h \
+ /mnt/utmp/codeblocks/usr/lib/gcc/armv7l-unknown-linux-gnueabi/4.8.2/include/stdarg.h \
+ /mnt/utmp/codeblocks/usr/include/bits/stdio_lim.h \
+ /mnt/utmp/codeblocks/usr/include/bits/sys_errlist.h \
+ /mnt/utmp/codeblocks/usr/include/bits/stdio.h \
+ /mnt/utmp/codeblocks/usr/include/string.h \
+ /mnt/utmp/codeblocks/usr/include/bits/string.h \
+ /mnt/utmp/codeblocks/usr/include/bits/string2.h \
+ /mnt/utmp/codeblocks/usr/include/stdlib.h
+../../SrcShared/Gzip/trees.c :
+/mnt/utmp/codeblocks/usr/include/ctype.h :
+/mnt/utmp/codeblocks/usr/include/features.h :
+/mnt/utmp/codeblocks/usr/include/sys/cdefs.h :
+/mnt/utmp/codeblocks/usr/include/bits/wordsize.h :
+/mnt/utmp/codeblocks/usr/include/gnu/stubs.h :
+/mnt/utmp/codeblocks/usr/include/bits/types.h :
+/mnt/utmp/codeblocks/usr/lib/gcc/armv7l-unknown-linux-gnueabi/4.8.2/include/stddef.h :
+/mnt/utmp/codeblocks/usr/include/bits/typesizes.h :
+/mnt/utmp/codeblocks/usr/include/endian.h :
+/mnt/utmp/codeblocks/usr/include/bits/endian.h :
+/mnt/utmp/codeblocks/usr/include/bits/byteswap.h :
+../../SrcShared/Gzip/tailor.h :
+../../SrcShared/Gzip/gzip.h :
+/mnt/utmp/codeblocks/usr/include/stdio.h :
+/mnt/utmp/codeblocks/usr/include/libio.h :
+/mnt/utmp/codeblocks/usr/include/_G_config.h :
+/mnt/utmp/codeblocks/usr/include/wchar.h :
+/mnt/utmp/codeblocks/usr/lib/gcc/armv7l-unknown-linux-gnueabi/4.8.2/include/stdarg.h :
+/mnt/utmp/codeblocks/usr/include/bits/stdio_lim.h :
+/mnt/utmp/codeblocks/usr/include/bits/sys_errlist.h :
+/mnt/utmp/codeblocks/usr/include/bits/stdio.h :
+/mnt/utmp/codeblocks/usr/include/string.h :
+/mnt/utmp/codeblocks/usr/include/bits/string.h :
+/mnt/utmp/codeblocks/usr/include/bits/string2.h :
+/mnt/utmp/codeblocks/usr/include/stdlib.h :

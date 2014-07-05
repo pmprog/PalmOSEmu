@@ -1,0 +1,44 @@
+HelpDialog.o: ../../SrcUnix/espws-2.0/HelpDialog.cxx \
+ ../../SrcUnix/espws-2.0/HelpDialog.h \
+ /media/linux/fltk-1.1.10/binaries/include/FL/Fl.H \
+ /media/linux/fltk-1.1.10/binaries/include/FL/Enumerations.H \
+ /media/linux/fltk-1.1.10/binaries/include/FL/Fl_Export.H \
+ /media/linux/fltk-1.1.10/binaries/include/FL/Fl_Window.H \
+ /media/linux/fltk-1.1.10/binaries/include/FL/Fl_Group.H \
+ /media/linux/fltk-1.1.10/binaries/include/FL/Fl_Widget.H \
+ /mnt/utmp/codeblocks/usr/include/string.h \
+ /mnt/utmp/codeblocks/usr/include/features.h \
+ /mnt/utmp/codeblocks/usr/include/sys/cdefs.h \
+ /mnt/utmp/codeblocks/usr/include/bits/wordsize.h \
+ /mnt/utmp/codeblocks/usr/include/gnu/stubs.h \
+ /mnt/utmp/codeblocks/usr/lib/gcc/armv7l-unknown-linux-gnueabi/4.8.2/include/stddef.h \
+ /mnt/utmp/codeblocks/usr/include/xlocale.h \
+ ../../SrcUnix/espws-2.0/HelpView.h \
+ /media/linux/fltk-1.1.10/binaries/include/FL/Fl_Group.H \
+ /media/linux/fltk-1.1.10/binaries/include/FL/Fl_Scrollbar.H \
+ /media/linux/fltk-1.1.10/binaries/include/FL/Fl_Slider.H \
+ /media/linux/fltk-1.1.10/binaries/include/FL/Fl_Valuator.H \
+ /media/linux/fltk-1.1.10/binaries/include/FL/fl_draw.H \
+ /media/linux/fltk-1.1.10/binaries/include/FL/Fl_Button.H
+../../SrcUnix/espws-2.0/HelpDialog.cxx :
+../../SrcUnix/espws-2.0/HelpDialog.h :
+/media/linux/fltk-1.1.10/binaries/include/FL/Fl.H :
+/media/linux/fltk-1.1.10/binaries/include/FL/Enumerations.H :
+/media/linux/fltk-1.1.10/binaries/include/FL/Fl_Export.H :
+/media/linux/fltk-1.1.10/binaries/include/FL/Fl_Window.H :
+/media/linux/fltk-1.1.10/binaries/include/FL/Fl_Group.H :
+/media/linux/fltk-1.1.10/binaries/include/FL/Fl_Widget.H :
+/mnt/utmp/codeblocks/usr/include/string.h :
+/mnt/utmp/codeblocks/usr/include/features.h :
+/mnt/utmp/codeblocks/usr/include/sys/cdefs.h :
+/mnt/utmp/codeblocks/usr/include/bits/wordsize.h :
+/mnt/utmp/codeblocks/usr/include/gnu/stubs.h :
+/mnt/utmp/codeblocks/usr/lib/gcc/armv7l-unknown-linux-gnueabi/4.8.2/include/stddef.h :
+/mnt/utmp/codeblocks/usr/include/xlocale.h :
+../../SrcUnix/espws-2.0/HelpView.h :
+/media/linux/fltk-1.1.10/binaries/include/FL/Fl_Group.H :
+/media/linux/fltk-1.1.10/binaries/include/FL/Fl_Scrollbar.H :
+/media/linux/fltk-1.1.10/binaries/include/FL/Fl_Slider.H :
+/media/linux/fltk-1.1.10/binaries/include/FL/Fl_Valuator.H :
+/media/linux/fltk-1.1.10/binaries/include/FL/fl_draw.H :
+/media/linux/fltk-1.1.10/binaries/include/FL/Fl_Button.H :

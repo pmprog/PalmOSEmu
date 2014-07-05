@@ -1,0 +1,16 @@
+CheckButton.o: ../../SrcUnix/espws-2.0/CheckButton.cxx \
+ /media/linux/fltk-1.1.10/binaries/include/FL/Fl.H \
+ /media/linux/fltk-1.1.10/binaries/include/FL/Enumerations.H \
+ /media/linux/fltk-1.1.10/binaries/include/FL/Fl_Export.H \
+ ../../SrcUnix/espws-2.0/CheckButton.h \
+ /media/linux/fltk-1.1.10/binaries/include/FL/Fl_Button.H \
+ /media/linux/fltk-1.1.10/binaries/include/FL/Fl_Widget.H \
+ /media/linux/fltk-1.1.10/binaries/include/FL/fl_draw.H
+../../SrcUnix/espws-2.0/CheckButton.cxx :
+/media/linux/fltk-1.1.10/binaries/include/FL/Fl.H :
+/media/linux/fltk-1.1.10/binaries/include/FL/Enumerations.H :
+/media/linux/fltk-1.1.10/binaries/include/FL/Fl_Export.H :
+../../SrcUnix/espws-2.0/CheckButton.h :
+/media/linux/fltk-1.1.10/binaries/include/FL/Fl_Button.H :
+/media/linux/fltk-1.1.10/binaries/include/FL/Fl_Widget.H :
+/media/linux/fltk-1.1.10/binaries/include/FL/fl_draw.H :

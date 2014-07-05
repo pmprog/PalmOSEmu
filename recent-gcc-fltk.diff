@@ -1,0 +1,1411 @@
+diff -Naur orig-Emulator_Src_3.5/BuildUnix/configure.in Emulator_Src_3.5/BuildUnix/configure.in
+--- orig-Emulator_Src_3.5/BuildUnix/configure.in	Sat Mar 30 01:11:13 2002
++++ Emulator_Src_3.5/BuildUnix/configure.in	Wed May 11 14:49:58 2005
+@@ -34,7 +34,7 @@
+ 	[  --with-fltk=DIR         use FLTK in DIR], [
+ 	CPPFLAGS="${CPPFLAGS} -I$withval/include"
+ 	LDFLAGS="${LDFLAGS} -L$withval/lib"
+-])
++	test "${FLUID+set}" != set && test -r "$withval/bin/fluid" && FLUID="$withval/bin/fluid"])
+ 
+ 
+ dnl ========================================================
+@@ -339,8 +339,36 @@
+ 
+ 
+ dnl ========================================================
++dnl Check whether the following code distilled from EmPoint.cpp
++dnl is compiled correctly -- GCC 3.3.x miscompiles this.
++dnl ========================================================
++
++AC_CACHE_CHECK([whether certain fragile casting works],
++	pose_cv_return_casting_ok,
++	AC_TRY_RUN([[
++		struct point { short x, y; };
++		point foo (long fX, long fY)
++		{
++			short pt[2]; pt[0] = fX; pt[1] = fY; return *(point*)pt;
++		}
++		int main()
++		{
++			point p = foo (28, 37);
++			return (p.x == 28 && p.y == 37)? 0 : 1;
++		}
++		]],
++		pose_cv_return_casting_ok=yes, pose_cv_return_casting_ok=no,
++		pose_cv_return_casting_ok="assuming yes"))
++
++if test "$pose_cv_return_casting_ok" = no; then
++	AC_DEFINE(BROKEN_RETURN_CASTING)
++fi
++
++
++dnl ========================================================
+ dnl Make sure FLTK is available.  It must be installed on
+-dnl a standard path, or on $x_libraries.
++dnl a standard path, or on $x_libraries, or via --with-fltk.
++dnl Also check that fluid is available (via PATH or --with-fltk).
+ dnl ========================================================
+ 
+ AC_CACHE_SAVE
+@@ -350,18 +378,41 @@
+ LIBS="-lfltk ${GLLIB} -L${ac_x_libraries} -lXext -lX11 -lm $X_EXTRA_LIBS $LIBS"
+ 
+ AC_LANG_CPLUSPLUS
+-AC_CACHE_CHECK([for 'int fl_height (void)' in -lfltk], pose_cv_lib_fltk_found,
+-	AC_TRY_LINK([#include <Fl/fl_draw.H>], [fl_height ();],
+-		pose_cv_lib_fltk_found=yes, pose_cv_lib_fltk_found=no))
++
++AC_DEFUN([MSG_ERROR_FLTK_MISSING],
++[AC_MSG_ERROR([*** FLTK *must* be installed before running configure. ***])])
++
++dnl CHECK_FLTK_FUNC(HEADER, FUNCTION, ARGUMENT_LIST)
++AC_DEFUN([CHECK_FLTK_FUNC],
++[AC_MSG_CHECKING([for fl_$2 in -lfltk])
++AC_TRY_LINK([#include <$1>], [fl_$2 ($3);],
++	[result=yes],
++	[AC_TRY_LINK([#include <$1>], [$2 ($3);],
++		[result=$2
++		AC_DEFINE([fl_$2], [$2])],
++		[result=no])])
++AC_MSG_RESULT($result)
++if test $result = no; then
++	MSG_ERROR_FLTK_MISSING
++fi])
++
++CHECK_FLTK_FUNC([FL/Enumerations.H], [contrast], [FL_BLACK, FL_BLACK])
++CHECK_FLTK_FUNC([FL/Enumerations.H], [inactive], [FL_BLACK])
++CHECK_FLTK_FUNC([FL/filename.H], [filename_absolute], ["", ""])
++CHECK_FLTK_FUNC([FL/filename.H], [filename_ext], [""])
++CHECK_FLTK_FUNC([FL/filename.H], [filename_isdir], [""])
++CHECK_FLTK_FUNC([FL/filename.H], [filename_list], ["", 0])
++CHECK_FLTK_FUNC([FL/filename.H], [filename_match], ["", ""])
++CHECK_FLTK_FUNC([FL/filename.H], [filename_setext], ["", ""])
+ 
+ LIBS="$save_LIBS"
+ 
+-if test $pose_cv_lib_fltk_found = yes; then
+-	AC_DEFINE(HAVE_LIBFLTK)
+-else
+-	AC_MSG_ERROR(*** FLTK *must* be installed before running configure. ***)
+-fi
++dnl $FLUID may have already been set by --with-fltk, above
++AC_CHECK_PROG(FLUID, fluid, fluid, no)
+ 
++if test "$FLUID" = no; then
++	MSG_ERROR_FLTK_MISSING
++fi
+ 
+ dnl ========================================================
+ dnl = Append the FLAGS variable that contains options for
+diff -Naur orig-Emulator_Src_3.5/BuildUnix/aclocal.m4 Emulator_Src_3.5/BuildUnix/aclocal.m4
+--- orig-Emulator_Src_3.5/BuildUnix/aclocal.m4	Sat Mar 30 01:11:20 2002
++++ Emulator_Src_3.5/BuildUnix/aclocal.m4	Wed May 11 14:50:14 2005
+@@ -16,6 +16,8 @@
+ 
+ # serial 1
+ 
++# FIXME  If Emulator work continues, we should modernise our autotools usage!
++
+ dnl Usage:
+ dnl AM_INIT_AUTOMAKE(package,version, [no-define])
+ 
+diff -Naur orig-Emulator_Src_3.5/BuildUnix/Gzip/Makefile.am Emulator_Src_3.5/BuildUnix/Gzip/Makefile.am
+--- orig-Emulator_Src_3.5/BuildUnix/Gzip/Makefile.am	Sat Mar 30 01:11:13 2002
++++ Emulator_Src_3.5/BuildUnix/Gzip/Makefile.am	Mon Apr  1 10:00:00 2002
+@@ -8,7 +8,7 @@
+ ##
+ SUFFIXES =	.cpp
+ 
+-VPATH =		$(srcdir)/../../SrcShared/Gzip:
++VPATH =		$(srcdir):$(srcdir)/../../SrcShared/Gzip:
+ 
+ ## no subdir specific flags needed -- just go with globals
+ LOCAL_CFLAGS =
+diff -Naur orig-Emulator_Src_3.5/BuildUnix/Gzip/Makefile.in Emulator_Src_3.5/BuildUnix/Gzip/Makefile.in
+--- orig-Emulator_Src_3.5/BuildUnix/Gzip/Makefile.in	Sat Mar 30 01:11:22 2002
++++ Emulator_Src_3.5/BuildUnix/Gzip/Makefile.in	Wed May 11 14:50:19 2005
+@@ -67,6 +67,7 @@
+ CC = @CC@
+ CPP = @CPP@
+ CXX = @CXX@
++FLUID = @FLUID@
+ GLLIB = @GLLIB@
+ MAKEINFO = @MAKEINFO@
+ PACKAGE = @PACKAGE@
+@@ -80,7 +81,7 @@
+ 
+ SUFFIXES = .cpp
+ 
+-VPATH = $(srcdir)/../../SrcShared/Gzip:
++VPATH = $(srcdir):$(srcdir)/../../SrcShared/Gzip:
+ 
+ LOCAL_CFLAGS = 
+ 
+diff -Naur orig-Emulator_Src_3.5/BuildUnix/Makefile.am Emulator_Src_3.5/BuildUnix/Makefile.am
+--- orig-Emulator_Src_3.5/BuildUnix/Makefile.am	Sat Mar 30 01:11:19 2002
++++ Emulator_Src_3.5/BuildUnix/Makefile.am	Mon Apr  1 10:00:00 2002
+@@ -8,7 +8,8 @@
+ 
+ SUFFIXES		=	.cpp
+ 
+-VPATH			=	$(srcdir)/../SrcUnix:					\
++VPATH			=	$(srcdir):								\
++					$(srcdir)/../SrcUnix:					\
+ 					$(srcdir)/../SrcShared:					\
+ 					$(srcdir)/../SrcShared/Hardware:		\
+ 					$(srcdir)/../SrcShared/Hardware/TRG:	\
+@@ -402,9 +403,9 @@
+ 
+ bin_PROGRAMS	=	pose
+ 
+-pose_LDADD		=	$(srcdir)/Gzip/libposergzip.a
+-pose_LDADD		+=	$(srcdir)/jpeg/libposerjpeg.a
+-pose_LDADD		+=	$(srcdir)/espws-2.0/libposerespws.a
++pose_LDADD		=	Gzip/libposergzip.a
++pose_LDADD		+=	jpeg/libposerjpeg.a
++pose_LDADD		+=	espws-2.0/libposerespws.a
+ pose_LDADD		+=	-lfltk
+ pose_LDADD		+=	-L/usr/local/lib $(X_LIBS) -lXext -lX11 $(THREAD_LIBS) $(GLLIB) -lm
+ 
+@@ -415,7 +416,7 @@
+ 	perl -x $(srcdir)/../SrcShared/Strings.txt
+ 
+ EmDlgFltkFactory.h EmDlgFltkFactory.cpp : $(srcdir)/../SrcUnix/EmDlgFltkFactory.fl
+-	fluid -c $(srcdir)/../SrcUnix/EmDlgFltkFactory.fl
++	$(FLUID) -c $(srcdir)/../SrcUnix/EmDlgFltkFactory.fl
+ 
+ EmDlgFltk.o : EmDlgFltkFactory.h
+ 
+diff -Naur orig-Emulator_Src_3.5/BuildUnix/Makefile.in Emulator_Src_3.5/BuildUnix/Makefile.in
+--- orig-Emulator_Src_3.5/BuildUnix/Makefile.in	Sat Mar 30 01:11:21 2002
++++ Emulator_Src_3.5/BuildUnix/Makefile.in	Wed May 11 14:50:19 2005
+@@ -67,6 +67,7 @@
+ CC = @CC@
+ CPP = @CPP@
+ CXX = @CXX@
++FLUID = @FLUID@
+ GLLIB = @GLLIB@
+ MAKEINFO = @MAKEINFO@
+ PACKAGE = @PACKAGE@
+@@ -82,7 +83,7 @@
+ 
+ SUFFIXES = .cpp
+ 
+-VPATH = $(srcdir)/../SrcUnix:										$(srcdir)/../SrcShared:										$(srcdir)/../SrcShared/Hardware:							$(srcdir)/../SrcShared/Hardware/TRG:						$(srcdir)/../SrcShared/omnithread:							$(srcdir)/../SrcShared/Palm/Platform/Core/System/Src:						$(srcdir)/../SrcShared/Patches:								$(srcdir)/../SrcShared/UAE:
++VPATH = $(srcdir):													$(srcdir)/../SrcUnix:										$(srcdir)/../SrcShared:										$(srcdir)/../SrcShared/Hardware:							$(srcdir)/../SrcShared/Hardware/TRG:						$(srcdir)/../SrcShared/omnithread:							$(srcdir)/../SrcShared/Palm/Platform/Core/System/Src:						$(srcdir)/../SrcShared/Patches:								$(srcdir)/../SrcShared/UAE:
+ 
+ 
+ CFLAGS = $(POSER_CFLAGS) $(LOCAL_CFLAGS) $(FLAGS) $(THREAD_FLAGS) $(X_CFLAGS)
+@@ -115,7 +116,7 @@
+ @SOLARIS_FALSE@SRC_THREAD = posix.cpp
+ 
+ bin_PROGRAMS = pose
+-pose_LDADD = $(srcdir)/Gzip/libposergzip.a $(srcdir)/jpeg/libposerjpeg.a $(srcdir)/espws-2.0/libposerespws.a -lfltk -L/usr/local/lib $(X_LIBS) -lXext -lX11 $(THREAD_LIBS) $(GLLIB) -lm
++pose_LDADD = Gzip/libposergzip.a jpeg/libposerjpeg.a espws-2.0/libposerespws.a -lfltk -L/usr/local/lib $(X_LIBS) -lXext -lX11 $(THREAD_LIBS) $(GLLIB) -lm
+ pose_SOURCES = $(SRC_UNIX) $(SRC_UNIX_GEN) $(SRC_SHARED) $(SRC_SHARED_HARDWARE) $(SRC_PATCHES) $(SRC_TRG) $(SRC_UAE) $(SRC_PALM) $(SRC_THREAD)
+ CLEANFILES = ResStrings.cpp EmDlgFltkFactory.h EmDlgFltkFactory.cpp config.cache config.log
+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
+@@ -221,8 +222,8 @@
+ @SOLARIS_FALSE@EmTRGCFIO.o EmTRGCFMem.o EmTRGDiskIO.o EmTRGDiskType.o \
+ @SOLARIS_FALSE@EmTRGSD.o cpudefs.o cpuemu.o cpustbl.o readcpu.o Crc.o \
+ @SOLARIS_FALSE@posix.o
+-pose_DEPENDENCIES =  $(srcdir)/Gzip/libposergzip.a \
+-$(srcdir)/jpeg/libposerjpeg.a $(srcdir)/espws-2.0/libposerespws.a
++pose_DEPENDENCIES =  Gzip/libposergzip.a jpeg/libposerjpeg.a \
++espws-2.0/libposerespws.a
+ pose_LDFLAGS = 
+ CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
+ CXXLD = $(CXX)
+@@ -647,7 +648,7 @@
+ 	perl -x $(srcdir)/../SrcShared/Strings.txt
+ 
+ EmDlgFltkFactory.h EmDlgFltkFactory.cpp : $(srcdir)/../SrcUnix/EmDlgFltkFactory.fl
+-	fluid -c $(srcdir)/../SrcUnix/EmDlgFltkFactory.fl
++	$(FLUID) -c $(srcdir)/../SrcUnix/EmDlgFltkFactory.fl
+ 
+ EmDlgFltk.o : EmDlgFltkFactory.h
+ 
+diff -Naur orig-Emulator_Src_3.5/BuildUnix/espws-2.0/Makefile.am Emulator_Src_3.5/BuildUnix/espws-2.0/Makefile.am
+--- orig-Emulator_Src_3.5/BuildUnix/espws-2.0/Makefile.am	Sat Mar 30 01:11:13 2002
++++ Emulator_Src_3.5/BuildUnix/espws-2.0/Makefile.am	Mon Apr  1 10:00:00 2002
+@@ -9,7 +9,7 @@
+ ##
+ SUFFIXES		=	.cxx
+ 
+-VPATH			=	$(srcdir)/../../SrcUnix/espws-2.0:
++VPATH			=	$(srcdir):$(srcdir)/../../SrcUnix/espws-2.0:
+ 
+ CFLAGS			=   $(POSER_CFLAGS) $(LOCAL_CFLAGS) $(X_CFLAGS)
+ CXXFLAGS		= 	$(POSER_CXXFLAGS) $(LOCAL_CFLAGS) $(X_CFLAGS)
+diff -Naur orig-Emulator_Src_3.5/BuildUnix/espws-2.0/Makefile.in Emulator_Src_3.5/BuildUnix/espws-2.0/Makefile.in
+--- orig-Emulator_Src_3.5/BuildUnix/espws-2.0/Makefile.in	Sat Mar 30 01:11:23 2002
++++ Emulator_Src_3.5/BuildUnix/espws-2.0/Makefile.in	Wed May 11 14:50:19 2005
+@@ -67,6 +67,7 @@
+ CC = @CC@
+ CPP = @CPP@
+ CXX = @CXX@
++FLUID = @FLUID@
+ GLLIB = @GLLIB@
+ MAKEINFO = @MAKEINFO@
+ PACKAGE = @PACKAGE@
+@@ -80,7 +81,7 @@
+ 
+ SUFFIXES = .cxx
+ 
+-VPATH = $(srcdir)/../../SrcUnix/espws-2.0:
++VPATH = $(srcdir):$(srcdir)/../../SrcUnix/espws-2.0:
+ 
+ CFLAGS = $(POSER_CFLAGS) $(LOCAL_CFLAGS) $(X_CFLAGS)
+ CXXFLAGS = $(POSER_CXXFLAGS) $(LOCAL_CFLAGS) $(X_CFLAGS)
+diff -Naur orig-Emulator_Src_3.5/BuildUnix/jpeg/Makefile.am Emulator_Src_3.5/BuildUnix/jpeg/Makefile.am
+--- orig-Emulator_Src_3.5/BuildUnix/jpeg/Makefile.am	Sat Mar 30 01:11:13 2002
++++ Emulator_Src_3.5/BuildUnix/jpeg/Makefile.am	Mon Apr  1 10:00:00 2002
+@@ -9,7 +9,7 @@
+ ##
+ SUFFIXES		=	.cpp
+ 
+-VPATH			=	$(srcdir)/../../SrcShared/jpeg:
++VPATH			=	$(srcdir):$(srcdir)/../../SrcShared/jpeg:
+ 
+ ## no subdir specific flags needed -- just go with globals
+ LOCAL_CFLAGS	=
+diff -Naur orig-Emulator_Src_3.5/BuildUnix/jpeg/Makefile.in Emulator_Src_3.5/BuildUnix/jpeg/Makefile.in
+--- orig-Emulator_Src_3.5/BuildUnix/jpeg/Makefile.in	Sat Mar 30 01:11:22 2002
++++ Emulator_Src_3.5/BuildUnix/jpeg/Makefile.in	Wed May 11 14:50:19 2005
+@@ -67,6 +67,7 @@
+ CC = @CC@
+ CPP = @CPP@
+ CXX = @CXX@
++FLUID = @FLUID@
+ GLLIB = @GLLIB@
+ MAKEINFO = @MAKEINFO@
+ PACKAGE = @PACKAGE@
+@@ -80,7 +81,7 @@
+ 
+ SUFFIXES = .cpp
+ 
+-VPATH = $(srcdir)/../../SrcShared/jpeg:
++VPATH = $(srcdir):$(srcdir)/../../SrcShared/jpeg:
+ 
+ LOCAL_CFLAGS = 
+ 
+diff -Naur orig-Emulator_Src_3.5/BuildUnix/configure Emulator_Src_3.5/BuildUnix/configure
+--- orig-Emulator_Src_3.5/BuildUnix/configure	Sat Mar 30 01:11:20 2002
++++ Emulator_Src_3.5/BuildUnix/configure	Wed May 11 14:50:25 2005
+@@ -2218,7 +2218,7 @@
+   
+ 	CPPFLAGS="${CPPFLAGS} -I$withval/include"
+ 	LDFLAGS="${LDFLAGS} -L$withval/lib"
+-
++	test "${FLUID+set}" != set && test -r "$withval/bin/fluid" && FLUID="$withval/bin/fluid"
+ fi
+ 
+ 
+@@ -3549,6 +3549,55 @@
+ 
+ 
+ 
++echo $ac_n "checking whether certain fragile casting works""... $ac_c" 1>&6
++echo "configure:3554: checking whether certain fragile casting works" >&5
++if eval "test \"`echo '$''{'pose_cv_return_casting_ok'+set}'`\" = set"; then
++  echo $ac_n "(cached) $ac_c" 1>&6
++else
++  if test "$cross_compiling" = yes; then
++  pose_cv_return_casting_ok="assuming yes"
++else
++  cat > conftest.$ac_ext <<EOF
++#line 3562 "configure"
++#include "confdefs.h"
++
++		struct point { short x, y; };
++		point foo (long fX, long fY)
++		{
++			short pt[2]; pt[0] = fX; pt[1] = fY; return *(point*)pt;
++		}
++		int main()
++		{
++			point p = foo (28, 37);
++			return (p.x == 28 && p.y == 37)? 0 : 1;
++		}
++		
++EOF
++if { (eval echo configure:3577: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
++then
++  pose_cv_return_casting_ok=yes
++else
++  echo "configure: failed program was:" >&5
++  cat conftest.$ac_ext >&5
++  rm -fr conftest*
++  pose_cv_return_casting_ok=no
++fi
++rm -fr conftest*
++fi
++
++fi
++
++echo "$ac_t""$pose_cv_return_casting_ok" 1>&6
++
++if test "$pose_cv_return_casting_ok" = no; then
++	cat >> confdefs.h <<\EOF
++#define BROKEN_RETURN_CASTING 1
++EOF
++
++fi
++
++
++
+ cat > confcache <<\EOF
+ # This file is a shell script that caches the results of configure
+ # tests run on this system so they can be shared between configure
+@@ -3607,44 +3656,408 @@
+ ac_link='${CXX-g++} -o conftest${ac_exeext} $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&5'
+ cross_compiling=$ac_cv_prog_cxx_cross
+ 
+-echo $ac_n "checking for 'int fl_height (void)' in -lfltk""... $ac_c" 1>&6
+-echo "configure:3612: checking for 'int fl_height (void)' in -lfltk" >&5
+-if eval "test \"`echo '$''{'pose_cv_lib_fltk_found'+set}'`\" = set"; then
+-  echo $ac_n "(cached) $ac_c" 1>&6
++
++
++
++
++
++echo $ac_n "checking for fl_contrast in -lfltk""... $ac_c" 1>&6
++echo "configure:3666: checking for fl_contrast in -lfltk" >&5
++cat > conftest.$ac_ext <<EOF
++#line 3668 "configure"
++#include "confdefs.h"
++#include <FL/Enumerations.H>
++int main() {
++fl_contrast (FL_BLACK, FL_BLACK);
++; return 0; }
++EOF
++if { (eval echo configure:3675: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
++  rm -rf conftest*
++  result=yes
+ else
++  echo "configure: failed program was:" >&5
++  cat conftest.$ac_ext >&5
++  rm -rf conftest*
+   cat > conftest.$ac_ext <<EOF
+-#line 3617 "configure"
++#line 3683 "configure"
+ #include "confdefs.h"
+-#include <Fl/fl_draw.H>
++#include <FL/Enumerations.H>
+ int main() {
+-fl_height ();
++contrast (FL_BLACK, FL_BLACK);
+ ; return 0; }
+ EOF
+-if { (eval echo configure:3624: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
++if { (eval echo configure:3690: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+   rm -rf conftest*
+-  pose_cv_lib_fltk_found=yes
++  result=contrast
++		cat >> confdefs.h <<\EOF
++#define fl_contrast contrast
++EOF
++
+ else
+   echo "configure: failed program was:" >&5
+   cat conftest.$ac_ext >&5
+   rm -rf conftest*
+-  pose_cv_lib_fltk_found=no
++  result=no
++fi
++rm -f conftest*
+ fi
+ rm -f conftest*
++echo "$ac_t""$result" 1>&6
++if test $result = no; then
++	{ echo "configure: error: *** FLTK *must* be installed before running configure. ***" 1>&2; exit 1; }
+ fi
++echo $ac_n "checking for fl_inactive in -lfltk""... $ac_c" 1>&6
++echo "configure:3711: checking for fl_inactive in -lfltk" >&5
++cat > conftest.$ac_ext <<EOF
++#line 3713 "configure"
++#include "confdefs.h"
++#include <FL/Enumerations.H>
++int main() {
++fl_inactive (FL_BLACK);
++; return 0; }
++EOF
++if { (eval echo configure:3720: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
++  rm -rf conftest*
++  result=yes
++else
++  echo "configure: failed program was:" >&5
++  cat conftest.$ac_ext >&5
++  rm -rf conftest*
++  cat > conftest.$ac_ext <<EOF
++#line 3728 "configure"
++#include "confdefs.h"
++#include <FL/Enumerations.H>
++int main() {
++inactive (FL_BLACK);
++; return 0; }
++EOF
++if { (eval echo configure:3735: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
++  rm -rf conftest*
++  result=inactive
++		cat >> confdefs.h <<\EOF
++#define fl_inactive inactive
++EOF
+ 
+-echo "$ac_t""$pose_cv_lib_fltk_found" 1>&6
++else
++  echo "configure: failed program was:" >&5
++  cat conftest.$ac_ext >&5
++  rm -rf conftest*
++  result=no
++fi
++rm -f conftest*
++fi
++rm -f conftest*
++echo "$ac_t""$result" 1>&6
++if test $result = no; then
++	{ echo "configure: error: *** FLTK *must* be installed before running configure. ***" 1>&2; exit 1; }
++fi
++echo $ac_n "checking for fl_filename_absolute in -lfltk""... $ac_c" 1>&6
++echo "configure:3756: checking for fl_filename_absolute in -lfltk" >&5
++cat > conftest.$ac_ext <<EOF
++#line 3758 "configure"
++#include "confdefs.h"
++#include <FL/filename.H>
++int main() {
++fl_filename_absolute ("", "");
++; return 0; }
++EOF
++if { (eval echo configure:3765: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
++  rm -rf conftest*
++  result=yes
++else
++  echo "configure: failed program was:" >&5
++  cat conftest.$ac_ext >&5
++  rm -rf conftest*
++  cat > conftest.$ac_ext <<EOF
++#line 3773 "configure"
++#include "confdefs.h"
++#include <FL/filename.H>
++int main() {
++filename_absolute ("", "");
++; return 0; }
++EOF
++if { (eval echo configure:3780: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
++  rm -rf conftest*
++  result=filename_absolute
++		cat >> confdefs.h <<\EOF
++#define fl_filename_absolute filename_absolute
++EOF
+ 
+-LIBS="$save_LIBS"
++else
++  echo "configure: failed program was:" >&5
++  cat conftest.$ac_ext >&5
++  rm -rf conftest*
++  result=no
++fi
++rm -f conftest*
++fi
++rm -f conftest*
++echo "$ac_t""$result" 1>&6
++if test $result = no; then
++	{ echo "configure: error: *** FLTK *must* be installed before running configure. ***" 1>&2; exit 1; }
++fi
++echo $ac_n "checking for fl_filename_ext in -lfltk""... $ac_c" 1>&6
++echo "configure:3801: checking for fl_filename_ext in -lfltk" >&5
++cat > conftest.$ac_ext <<EOF
++#line 3803 "configure"
++#include "confdefs.h"
++#include <FL/filename.H>
++int main() {
++fl_filename_ext ("");
++; return 0; }
++EOF
++if { (eval echo configure:3810: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
++  rm -rf conftest*
++  result=yes
++else
++  echo "configure: failed program was:" >&5
++  cat conftest.$ac_ext >&5
++  rm -rf conftest*
++  cat > conftest.$ac_ext <<EOF
++#line 3818 "configure"
++#include "confdefs.h"
++#include <FL/filename.H>
++int main() {
++filename_ext ("");
++; return 0; }
++EOF
++if { (eval echo configure:3825: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
++  rm -rf conftest*
++  result=filename_ext
++		cat >> confdefs.h <<\EOF
++#define fl_filename_ext filename_ext
++EOF
+ 
+-if test $pose_cv_lib_fltk_found = yes; then
+-	cat >> confdefs.h <<\EOF
+-#define HAVE_LIBFLTK 1
++else
++  echo "configure: failed program was:" >&5
++  cat conftest.$ac_ext >&5
++  rm -rf conftest*
++  result=no
++fi
++rm -f conftest*
++fi
++rm -f conftest*
++echo "$ac_t""$result" 1>&6
++if test $result = no; then
++	{ echo "configure: error: *** FLTK *must* be installed before running configure. ***" 1>&2; exit 1; }
++fi
++echo $ac_n "checking for fl_filename_isdir in -lfltk""... $ac_c" 1>&6
++echo "configure:3846: checking for fl_filename_isdir in -lfltk" >&5
++cat > conftest.$ac_ext <<EOF
++#line 3848 "configure"
++#include "confdefs.h"
++#include <FL/filename.H>
++int main() {
++fl_filename_isdir ("");
++; return 0; }
++EOF
++if { (eval echo configure:3855: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
++  rm -rf conftest*
++  result=yes
++else
++  echo "configure: failed program was:" >&5
++  cat conftest.$ac_ext >&5
++  rm -rf conftest*
++  cat > conftest.$ac_ext <<EOF
++#line 3863 "configure"
++#include "confdefs.h"
++#include <FL/filename.H>
++int main() {
++filename_isdir ("");
++; return 0; }
++EOF
++if { (eval echo configure:3870: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
++  rm -rf conftest*
++  result=filename_isdir
++		cat >> confdefs.h <<\EOF
++#define fl_filename_isdir filename_isdir
+ EOF
+ 
+ else
++  echo "configure: failed program was:" >&5
++  cat conftest.$ac_ext >&5
++  rm -rf conftest*
++  result=no
++fi
++rm -f conftest*
++fi
++rm -f conftest*
++echo "$ac_t""$result" 1>&6
++if test $result = no; then
+ 	{ echo "configure: error: *** FLTK *must* be installed before running configure. ***" 1>&2; exit 1; }
+ fi
++echo $ac_n "checking for fl_filename_list in -lfltk""... $ac_c" 1>&6
++echo "configure:3891: checking for fl_filename_list in -lfltk" >&5
++cat > conftest.$ac_ext <<EOF
++#line 3893 "configure"
++#include "confdefs.h"
++#include <FL/filename.H>
++int main() {
++fl_filename_list ("", 0);
++; return 0; }
++EOF
++if { (eval echo configure:3900: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
++  rm -rf conftest*
++  result=yes
++else
++  echo "configure: failed program was:" >&5
++  cat conftest.$ac_ext >&5
++  rm -rf conftest*
++  cat > conftest.$ac_ext <<EOF
++#line 3908 "configure"
++#include "confdefs.h"
++#include <FL/filename.H>
++int main() {
++filename_list ("", 0);
++; return 0; }
++EOF
++if { (eval echo configure:3915: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
++  rm -rf conftest*
++  result=filename_list
++		cat >> confdefs.h <<\EOF
++#define fl_filename_list filename_list
++EOF
+ 
++else
++  echo "configure: failed program was:" >&5
++  cat conftest.$ac_ext >&5
++  rm -rf conftest*
++  result=no
++fi
++rm -f conftest*
++fi
++rm -f conftest*
++echo "$ac_t""$result" 1>&6
++if test $result = no; then
++	{ echo "configure: error: *** FLTK *must* be installed before running configure. ***" 1>&2; exit 1; }
++fi
++echo $ac_n "checking for fl_filename_match in -lfltk""... $ac_c" 1>&6
++echo "configure:3936: checking for fl_filename_match in -lfltk" >&5
++cat > conftest.$ac_ext <<EOF
++#line 3938 "configure"
++#include "confdefs.h"
++#include <FL/filename.H>
++int main() {
++fl_filename_match ("", "");
++; return 0; }
++EOF
++if { (eval echo configure:3945: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
++  rm -rf conftest*
++  result=yes
++else
++  echo "configure: failed program was:" >&5
++  cat conftest.$ac_ext >&5
++  rm -rf conftest*
++  cat > conftest.$ac_ext <<EOF
++#line 3953 "configure"
++#include "confdefs.h"
++#include <FL/filename.H>
++int main() {
++filename_match ("", "");
++; return 0; }
++EOF
++if { (eval echo configure:3960: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
++  rm -rf conftest*
++  result=filename_match
++		cat >> confdefs.h <<\EOF
++#define fl_filename_match filename_match
++EOF
++
++else
++  echo "configure: failed program was:" >&5
++  cat conftest.$ac_ext >&5
++  rm -rf conftest*
++  result=no
++fi
++rm -f conftest*
++fi
++rm -f conftest*
++echo "$ac_t""$result" 1>&6
++if test $result = no; then
++	{ echo "configure: error: *** FLTK *must* be installed before running configure. ***" 1>&2; exit 1; }
++fi
++echo $ac_n "checking for fl_filename_setext in -lfltk""... $ac_c" 1>&6
++echo "configure:3981: checking for fl_filename_setext in -lfltk" >&5
++cat > conftest.$ac_ext <<EOF
++#line 3983 "configure"
++#include "confdefs.h"
++#include <FL/filename.H>
++int main() {
++fl_filename_setext ("", "");
++; return 0; }
++EOF
++if { (eval echo configure:3990: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
++  rm -rf conftest*
++  result=yes
++else
++  echo "configure: failed program was:" >&5
++  cat conftest.$ac_ext >&5
++  rm -rf conftest*
++  cat > conftest.$ac_ext <<EOF
++#line 3998 "configure"
++#include "confdefs.h"
++#include <FL/filename.H>
++int main() {
++filename_setext ("", "");
++; return 0; }
++EOF
++if { (eval echo configure:4005: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
++  rm -rf conftest*
++  result=filename_setext
++		cat >> confdefs.h <<\EOF
++#define fl_filename_setext filename_setext
++EOF
++
++else
++  echo "configure: failed program was:" >&5
++  cat conftest.$ac_ext >&5
++  rm -rf conftest*
++  result=no
++fi
++rm -f conftest*
++fi
++rm -f conftest*
++echo "$ac_t""$result" 1>&6
++if test $result = no; then
++	{ echo "configure: error: *** FLTK *must* be installed before running configure. ***" 1>&2; exit 1; }
++fi
++
++LIBS="$save_LIBS"
++
++# Extract the first word of "fluid", so it can be a program name with args.
++set dummy fluid; ac_word=$2
++echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
++echo "configure:4031: checking for $ac_word" >&5
++if eval "test \"`echo '$''{'ac_cv_prog_FLUID'+set}'`\" = set"; then
++  echo $ac_n "(cached) $ac_c" 1>&6
++else
++  if test -n "$FLUID"; then
++  ac_cv_prog_FLUID="$FLUID" # Let the user override the test.
++else
++  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS=":"
++  ac_dummy="$PATH"
++  for ac_dir in $ac_dummy; do
++    test -z "$ac_dir" && ac_dir=.
++    if test -f $ac_dir/$ac_word; then
++      ac_cv_prog_FLUID="fluid"
++      break
++    fi
++  done
++  IFS="$ac_save_ifs"
++  test -z "$ac_cv_prog_FLUID" && ac_cv_prog_FLUID="no"
++fi
++fi
++FLUID="$ac_cv_prog_FLUID"
++if test -n "$FLUID"; then
++  echo "$ac_t""$FLUID" 1>&6
++else
++  echo "$ac_t""no" 1>&6
++fi
++
++
++if test "$FLUID" = no; then
++	{ echo "configure: error: *** FLTK *must* be installed before running configure. ***" 1>&2; exit 1; }
++fi
+ 
+ 
+ FLAGS="$FLAGS_COMMON $FLAGS_OPTIMIZE $FLAGS_PROFILE $FLAGS_PALM_PROFILE $FLAGS_DEBUG"
+@@ -3852,6 +4265,7 @@
+ s%@ALLOCA@%$ALLOCA%g
+ s%@CXXCPP@%$CXXCPP%g
+ s%@GLLIB@%$GLLIB%g
++s%@FLUID@%$FLUID%g
+ s%@AR@%$AR%g
+ s%@POSER_CFLAGS@%$POSER_CFLAGS%g
+ s%@POSER_CXXFLAGS@%$POSER_CXXFLAGS%g
+diff -Naur orig-Emulator_Src_3.5/SrcShared/EmPalmStructs.cpp Emulator_Src_3.5/SrcShared/EmPalmStructs.cpp
+--- orig-Emulator_Src_3.5/SrcShared/EmPalmStructs.cpp	Sat Mar 30 01:11:14 2002
++++ Emulator_Src_3.5/SrcShared/EmPalmStructs.cpp	Fri May  6 19:13:50 2005
+@@ -62,6 +62,9 @@
+ 	template class EmAlias##type<LAS>;	\
+ 	template class EmAlias##type<PAS>;
+ 
++#define INSTANTIATE_SCALAR_CLASS_WITH_VOIDPTR(type, asType)	\
++	INSTANTIATE_SCALAR_CLASS(type, asType)
++
+ #define INSTANTIATE_STRUCT_CLASS(type, size, FOR_EACH_FIELD)	\
+ 	template class EmAlias##type<LAS>;	\
+ 	template class EmAlias##type<PAS>;
+diff -Naur orig-Emulator_Src_3.5/SrcShared/EmPalmStructs.h Emulator_Src_3.5/SrcShared/EmPalmStructs.h
+--- orig-Emulator_Src_3.5/SrcShared/EmPalmStructs.h	Sat Mar 30 01:11:14 2002
++++ Emulator_Src_3.5/SrcShared/EmPalmStructs.h	Fri May  6 19:23:41 2005
+@@ -373,7 +373,7 @@
+ // Macro for creating the class that wraps up simple types.
+ // ======================================================================
+ 
+-#define DECLARE_SCALAR_ALIAS(type, asType)											\
++#define DECLARE_SCALAR_ALIAS(type, asType, EXTRA_ASSIGNMENT_OPERATORS)				\
+ 																					\
+ 	template <class A>																\
+ 	class EmAlias##type																\
+@@ -400,7 +400,7 @@
+ 			EmAlias##type<A>&	operator= (const signed int);						\
+ 			EmAlias##type<A>&	operator= (const signed long);						\
+ 																					\
+-			EmAlias##type<A>&	operator= (const void*);							\
++			EXTRA_ASSIGNMENT_OPERATORS												\
+ 			EmAlias##type<A>&	operator= (const EmAlias##type<A>&);				\
+ 																					\
+ 								operator type (void) const;							\
+@@ -414,7 +414,7 @@
+ 			ptr_type			fPtr;												\
+ 	};
+ 
+-#define DECLARE_SCALAR_PROXY(type, asType)											\
++#define DECLARE_SCALAR_PROXY(type, asType, EXTRA_ASSIGNMENT_OPERATORS)				\
+ 																					\
+ 	class EmProxy##type																\
+ 	{																				\
+@@ -440,7 +440,7 @@
+ 			EmProxy##type&		operator= (const signed int);						\
+ 			EmProxy##type&		operator= (const signed long);						\
+ 																					\
+-			EmProxy##type&		operator= (const void*);							\
++			EXTRA_ASSIGNMENT_OPERATORS												\
+ 			EmProxy##type&		operator= (const EmProxy##type&);					\
+ 																					\
+ 								operator type (void) const;							\
+@@ -455,8 +455,12 @@
+ 	};
+ 
+ #define DECLARE_SCALAR_CLASSES(type, asType)										\
+-	DECLARE_SCALAR_ALIAS(type, asType)												\
+-	DECLARE_SCALAR_PROXY(type, asType)
++	DECLARE_SCALAR_ALIAS(type, asType, /* No extra operator= */)					\
++	DECLARE_SCALAR_PROXY(type, asType, /* No extra operator= */)
++
++#define DECLARE_SCALAR_CLASSES_WITH_VOIDPTR(type, asType)							\
++	DECLARE_SCALAR_ALIAS(type, asType, EmAlias##type<A>& operator= (const void*);)	\
++	DECLARE_SCALAR_PROXY(type, asType, EmProxy##type& operator= (const void*);)
+ 
+ #define DEFINE_SCALAR_ALIAS(type, asType)											\
+ 																					\
+@@ -488,7 +492,6 @@
+ 	MAKE_ONE_SCALAR_ALIAS_ASSIGNMENT_OPERATOR(type, asType, unsigned short)			\
+ 	MAKE_ONE_SCALAR_ALIAS_ASSIGNMENT_OPERATOR(type, asType, unsigned int)			\
+ 	MAKE_ONE_SCALAR_ALIAS_ASSIGNMENT_OPERATOR(type, asType, unsigned long)			\
+-	MAKE_ONE_SCALAR_ALIAS_ASSIGNMENT_OPERATOR(type, asType, const void*)			\
+ 	MAKE_ONE_SCALAR_ALIAS_ASSIGNMENT_OPERATOR(type, asType, const EmAlias##type<A>&)\
+ 																					\
+ 	template <class A>																\
+@@ -539,7 +542,6 @@
+ 	MAKE_ONE_SCALAR_PROXY_ASSIGNMENT_OPERATOR(type, asType, unsigned short)			\
+ 	MAKE_ONE_SCALAR_PROXY_ASSIGNMENT_OPERATOR(type, asType, unsigned int)			\
+ 	MAKE_ONE_SCALAR_PROXY_ASSIGNMENT_OPERATOR(type, asType, unsigned long)			\
+-	MAKE_ONE_SCALAR_PROXY_ASSIGNMENT_OPERATOR(type, asType, const void*)			\
+ 	MAKE_ONE_SCALAR_PROXY_ASSIGNMENT_OPERATOR(type, asType, const EmProxy##type&)	\
+ 																					\
+ 	INLINE_ EmProxy##type::operator type (void) const								\
+@@ -570,6 +572,12 @@
+ 	DEFINE_SCALAR_ALIAS(type, asType)												\
+ 	DEFINE_SCALAR_PROXY(type, asType)
+ 
++#define DEFINE_SCALAR_CLASSES_WITH_VOIDPTR(type, asType)							\
++	DEFINE_SCALAR_ALIAS(type, asType)												\
++	MAKE_ONE_SCALAR_ALIAS_ASSIGNMENT_OPERATOR(type, asType, const void*)			\
++	DEFINE_SCALAR_PROXY(type, asType)												\
++	MAKE_ONE_SCALAR_PROXY_ASSIGNMENT_OPERATOR(type, asType, const void*)
++
+ // Macro that creates the implementation for an assignment operator for simple types.
+ 
+ #define MAKE_ONE_SCALAR_ALIAS_ASSIGNMENT_OPERATOR(type, asType, rhs_type)			\
+@@ -799,7 +807,7 @@
+ 	DO_TO_SCALAR (ControlStyleType, uint8)			\
+ 	DO_TO_SCALAR (Coord, uint16)					\
+ 	DO_TO_SCALAR (DmResID, uint16)					\
+-	DO_TO_SCALAR (emuptr, emuptr)					\
++	DO_TO_SCALAR##_WITH_VOIDPTR (emuptr, emuptr)	\
+ 	DO_TO_SCALAR (Err, uint16)						\
+ 	DO_TO_SCALAR (FontID, uint8)					\
+ 	DO_TO_SCALAR (FormObjectKind, uint8)			\
+diff -Naur orig-Emulator_Src_3.5/SrcShared/EmPoint.cpp Emulator_Src_3.5/SrcShared/EmPoint.cpp
+--- orig-Emulator_Src_3.5/SrcShared/EmPoint.cpp	Sat Mar 30 01:11:14 2002
++++ Emulator_Src_3.5/SrcShared/EmPoint.cpp	Wed May 11 12:41:29 2005
+@@ -231,9 +231,16 @@
+ // Return another kind of point
+ //
+ 	#undef FOR_POINT
++	#ifndef BROKEN_RETURN_CASTING
+ 	#define FOR_POINT(cls, size, x, y)		\
+ 		EmPoint::operator cls() const		\
+ 			{ size pt[2]; pt[x] = fX; pt[y] = fY; return *(cls*) pt; }
++	#else
++	#define FOR_POINT(cls, size, x, y)		\
++		EmPoint::operator cls() const		\
++			{ union {size pt[2]; cls c;} u;	\
++			  u.pt[x] = fX; u.pt[y] = fY; return u.c; }
++	#endif
+ 
+ 	POINT_LIST_XY_LONG
+ 	POINT_LIST_YX_LONG
+diff -Naur orig-Emulator_Src_3.5/SrcShared/EmStream.h Emulator_Src_3.5/SrcShared/EmStream.h
+--- orig-Emulator_Src_3.5/SrcShared/EmStream.h	Sat Mar 30 01:11:14 2002
++++ Emulator_Src_3.5/SrcShared/EmStream.h	Thu Mar 17 14:04:02 2005
+@@ -90,7 +90,7 @@
+ 
+ 									container.resize (numElements);
+ 
+-									deque<T>::iterator	iter = container.begin ();
++									typename deque<T>::iterator	iter = container.begin ();
+ 									while (iter != container.end ())
+ 									{
+ 										*this >> *iter;
+@@ -108,7 +108,7 @@
+ 
+ 									container.resize (numElements);
+ 
+-									list<T>::iterator	iter = container.begin ();
++									typename list<T>::iterator	iter = container.begin ();
+ 									while (iter != container.end ())
+ 									{
+ 										*this >> *iter;
+@@ -126,7 +126,7 @@
+ 
+ 									container.resize (numElements);
+ 
+-									vector<T>::iterator	iter = container.begin ();
++									typename vector<T>::iterator	iter = container.begin ();
+ 									while (iter != container.end ())
+ 									{
+ 										*this >> *iter;
+@@ -143,7 +143,7 @@
+ 
+ 									*this << numElements;
+ 
+-									deque<T>::const_iterator	iter = container.begin ();
++									typename deque<T>::const_iterator	iter = container.begin ();
+ 									while (iter != container.end ())
+ 									{
+ 										*this << *iter;
+@@ -160,7 +160,7 @@
+ 
+ 									*this << numElements;
+ 
+-									list<T>::const_iterator	iter = container.begin ();
++									typename list<T>::const_iterator	iter = container.begin ();
+ 									while (iter != container.end ())
+ 									{
+ 										*this << *iter;
+@@ -177,7 +177,7 @@
+ 
+ 									*this << numElements;
+ 
+-									vector<T>::const_iterator	iter = container.begin ();
++									typename vector<T>::const_iterator	iter = container.begin ();
+ 									while (iter != container.end ())
+ 									{
+ 										*this << *iter;
+diff -Naur orig-Emulator_Src_3.5/SrcShared/Hardware/EmRegs328.cpp Emulator_Src_3.5/SrcShared/Hardware/EmRegs328.cpp
+--- orig-Emulator_Src_3.5/SrcShared/Hardware/EmRegs328.cpp	Sat Mar 30 01:11:18 2002
++++ Emulator_Src_3.5/SrcShared/Hardware/EmRegs328.cpp	Thu Mar 17 14:21:36 2005
+@@ -141,13 +141,13 @@
+ 	0x2400,		//	Word		pllControl;					// $200: PLL Control Register
+ 	0x0123,		//	Word		pllFreqSel;					// $202: PLL Frequency Select Register
+ 	0x0000,		//	Word		pllTest;					// $204: PLL Test Register
+-	{ 0 },		//	Byte										__filler44;
++	0,			//	Byte										__filler44;
+ 	0x1F,		//	Byte		pwrControl;					// $207: Power Control Register
+ 
+ 	{ 0 },		//	Byte										___filler3[0x300-0x208];
+ 
+ 	0x00,		//	Byte		intVector;					// $300: Interrupt Vector Register
+-	{ 0 },		//	Byte										___filler4;
++	0,			//	Byte										___filler4;
+ 	0x0000,		//	Word		intControl;					// $302: Interrupt Control Register
+ 	0x00FF,		//	Word		intMaskHi;					// $304: Interrupt Mask Register/HIGH word
+ 	0xFFFF,		//	Word		intMaskLo;					// $306: Interrupt Mask Register/LOW word
+@@ -162,21 +162,21 @@
+ 
+ 	0x00,		//	Byte		portADir;					// $400: Port A Direction Register
+ 	0x00,		//	Byte		portAData;					// $401: Port A Data Register
+-	{ 0 },		//	Byte										___filler5;
++	0,			//	Byte										___filler5;
+ 	0x00,		//	Byte		portASelect;				// $403: Port A Select Register
+ 
+ 	{ 0 },		//	Byte										___filler6[4];
+ 
+ 	0x00,		//	Byte		portBDir;					// $408: Port B Direction Register
+ 	0x00,		//	Byte		portBData;					// $409: Port B Data Register
+-	{ 0 },		//	Byte										___filler7;
++	0,			//	Byte										___filler7;
+ 	0x00,		//	Byte		portBSelect;				// $40B: Port B Select Register
+ 
+ 	{ 0 },		//	Byte										___filler8[4];
+ 
+ 	0x00,		//	Byte		portCDir;					// $410: Port C Direction Register
+ 	0x00,		//	Byte		portCData;					// $411: Port C Data Register
+-	{ 0 },		//	Byte										___filler9;
++	0,			//	Byte										___filler9;
+ 	0x00,		//	Byte		portCSelect;				// $413: Port C Select Register
+ 
+ 	{ 0 },		//	Byte										___filler10[4];
+@@ -184,10 +184,10 @@
+ 	0x00,		//	Byte		portDDir;					// $418: Port D Direction Register
+ 	0x00,		//	Byte		portDData;					// $419: Port D Data Register
+ 	0xFF,		//	Byte		portDPullupEn;				// $41A: Port D Pull-up Enable
+-	{ 0 },		//	Byte										___filler11;
++	0,			//	Byte										___filler11;
+ 	0x00,		//	Byte		portDPolarity;				// $41C: Port D Polarity Register
+ 	0x00,		//	Byte		portDIntReqEn;				// $41D: Port D Interrupt Request Enable
+-	{ 0 },		//	Byte										___filler12;
++	0,			//	Byte										___filler12;
+ 	0x00,		//	Byte		portDIntEdge;				// $41F: Port D IRQ Edge Register
+ 
+ 	0x00,		//	Byte		portEDir;					// $420: Port E Direction Register
+@@ -213,7 +213,7 @@
+ 
+ 	0x00,		//	Byte		portJDir;					// $438: Port J Direction Register
+ 	0x00,		//	Byte		portJData;					// $439: Port J Data Register
+-	{ 0 },		//	Byte										___filler19;
++	0,			//	Byte										___filler19;
+ 	0x00,		//	Byte		portJSelect;				// $43B: Port J Select Register
+ 
+ 	{ 0 },		//	Byte										___filler19a[4];
+@@ -279,7 +279,7 @@
+ 	{ 0 },		//	Byte										___filler28[0xA00-0x90A];
+ 
+ 	0x00000000,	//	DWord		lcdStartAddr;				// $A00: Screen Starting Address Register
+-	{ 0 },		//	Byte										___filler29;
++	0,			//	Byte										___filler29;
+ 	0xFF,		//	Byte		lcdPageWidth;				// $A05: Virtual Page Width Register
+ 	{ 0 },		//	Byte										___filler30[2];
+ 	0x03FF,		//	Word		lcdScreenWidth;				// $A08: Screen Width Register
+@@ -288,7 +288,7 @@
+ 	0x0000,		//	Word		lcdCursorXPos;				// $A18: Cursor X Position
+ 	0x0000,		//	Word		lcdCursorYPos;				// $A1A:	Cursor Y Position
+ 	0x0101,		//	Word		lcdCursorWidthHeight;		// $A1C: Cursor Width and Height
+-	{ 0 },		//	Byte										___filler32;
++	0,			//	Byte										___filler32;
+ 	0x7F,		//	Byte		lcdBlinkControl;			// $A1F: Blink Control Register
+ 	0x00,		//	Byte		lcdPanelControl;			// $A20: Panel Interface Control Register
+ 	0x00,		//	Byte		lcdPolarity;				// $A21: Polarity Config Register
+diff -Naur orig-Emulator_Src_3.5/SrcShared/Hardware/EmRegsEZ.cpp Emulator_Src_3.5/SrcShared/Hardware/EmRegsEZ.cpp
+--- orig-Emulator_Src_3.5/SrcShared/Hardware/EmRegsEZ.cpp	Sat Mar 30 01:11:18 2002
++++ Emulator_Src_3.5/SrcShared/Hardware/EmRegsEZ.cpp	Thu Mar 17 14:18:38 2005
+@@ -84,13 +84,13 @@
+ 	0x2430,		// Word		pllControl;						// $200: PLL Control Register
+ 	0x0123,		// Word		pllFreqSel;						// $202: PLL Frequency Select Register
+ 	0,		// !!! ---> Marked as reserved in 1.4 Word		pllTest;						// $204: PLL Test Register (do not access)
+-	{ 0 },		// Byte											___filler44;
++	0,			// Byte											___filler44;
+ 	0x1F,		// Byte		pwrControl;						// $207: Power Control Register
+ 
+ 	{ 0 },		// Byte											___filler3[0x300-0x208];
+ 
+ 	0x00,		// Byte		intVector;						// $300: Interrupt Vector Register
+-	{ 0 },		// Byte											___filler4;
++	0,			// Byte											___filler4;
+ 	0x0000,		// Word		intControl;						// $302: Interrupt Control Register
+ 	0x00FF,		// Word		intMaskHi;						// $304: Interrupt Mask Register/HIGH word
+ 	0xFFFF,		// Word		intMaskLo;						// $306: Interrupt Mask Register/LOW word
+@@ -183,7 +183,7 @@
+ 	{ 0 },		// Byte											___filler28[0xA00-0x90C];
+ 
+ 	0x00000000,	// DWord	lcdStartAddr;					// $A00: Screen Starting Address Register
+-	{ 0 },		// Byte											___filler29;
++	0,			// Byte											___filler29;
+ 	0xFF,		// Byte		lcdPageWidth;					// $A05: Virtual Page Width Register
+ 	{ 0 },		// Byte											___filler30[2];
+ 	0x03FF,		// Word		lcdScreenWidth;					// $A08: Screen Width Register
+@@ -192,17 +192,17 @@
+ 	0x0000,		// Word		lcdCursorXPos;					// $A18: Cursor X Position
+ 	0x0000,		// Word		lcdCursorYPos;					// $A1A:	Cursor Y Position
+ 	0x0101,		// Word		lcdCursorWidthHeight;			// $A1C: Cursor Width and Height
+-	{ 0 },		// Byte											___filler32;
++	0,			// Byte											___filler32;
+ 	0x7F,		// Byte		lcdBlinkControl;				// $A1F: Blink Control Register
+ 	0x00,		// Byte		lcdPanelControl;				// $A20: Panel Interface Control Register
+ 	0x00,		// Byte		lcdPolarity;					// $A21: Polarity Config Register
+-	{ 0 },		// Byte											___filler33;						
++	0,			// Byte											___filler33;						
+ 	0x00,		// Byte		lcdACDRate;						// $A23: ACD (M) Rate Control Register
+-	{ 0 },		// Byte											___filler34;
++	0,			// Byte											___filler34;
+ 	0x00,		// Byte		lcdPixelClock;					// $A25: Pixel Clock Divider Register
+-	{ 0 },		// Byte											___filler35;
++	0,			// Byte											___filler35;
+ 	0x40,		// Byte		lcdClockControl;				// $A27: Clocking Control Register
+-	{ 0 },		// Byte											___filler36;
++	0,			// Byte											___filler36;
+ 	0xFF,		// Byte		lcdRefreshRateAdj;				// $A29: Refresh Rate Adjustment Register
+ 	{ 0 },		// Byte											___filler2003[0xA2D-0xA2A];
+ 	0x00,		// Byte		lcdPanningOffset;				// $A2D: Panning Offset Register
+@@ -210,10 +210,10 @@
+ 	{ 0 },		// Byte											___filler37[0xA31-0xA2E];
+ 
+ 	0xB9,		// Byte		lcdFrameRate;					// $A31: Frame Rate Control Modulation Register
+-	{ 0 },		// Byte											___filler2004;
++	0,			// Byte											___filler2004;
+ 	0x84,		// Byte		lcdGrayPalette;					// $A33: Gray Palette Mapping Register
+ 	0x00,		// Byte		lcdReserved;					// $A34: Reserved
+-	{ 0 },		// Byte											___filler2005;
++	0,			// Byte											___filler2005;
+ 	0x0000,		// Word		lcdContrastControlPWM;			// $A36: Contrast Control
+ 
+ 	{ 0 },		// Byte											___filler40[0xB00-0xA38];
+diff -Naur orig-Emulator_Src_3.5/SrcShared/Hardware/EmRegsEZTRGpro.cpp Emulator_Src_3.5/SrcShared/Hardware/EmRegsEZTRGpro.cpp
+--- orig-Emulator_Src_3.5/SrcShared/Hardware/EmRegsEZTRGpro.cpp	Sat Mar 30 01:11:18 2002
++++ Emulator_Src_3.5/SrcShared/Hardware/EmRegsEZTRGpro.cpp	Thu May  5 18:57:03 2005
+@@ -229,7 +229,7 @@
+ void EmRegsEZTRGpro::SetSubBankHandlers(void)
+ {
+ 	EmRegsEZ::SetSubBankHandlers();
+-	this->SetHandler((ReadFunction)&EmRegs::StdRead,
++	this->SetHandler((ReadFunction)&EmRegsEZTRGpro::StdRead,
+                          (WriteFunction)&EmRegsEZTRGpro::spiWrite,
+ 	                 addressof(spiMasterData),
+ 	                 sizeof(f68EZ328Regs.spiMasterData));
+diff -Naur orig-Emulator_Src_3.5/SrcShared/Hardware/EmRegsVZ.cpp Emulator_Src_3.5/SrcShared/Hardware/EmRegsVZ.cpp
+--- orig-Emulator_Src_3.5/SrcShared/Hardware/EmRegsVZ.cpp	Sat Mar 30 01:11:19 2002
++++ Emulator_Src_3.5/SrcShared/Hardware/EmRegsVZ.cpp	Thu Mar 17 14:19:28 2005
+@@ -270,7 +270,7 @@
+ 	{ 0 },		// UInt8									___filler28a[0xA00-0x91E];
+ 
+ 	0x00000000,	// UInt32	lcdStartAddr;				// $A00: Screen Starting Address Register
+-	{ 0 },		// UInt8									___filler29;
++	0,			// UInt8									___filler29;
+ 	0xFF,		// UInt8	lcdPageWidth;				// $A05: Virtual Page Width Register
+ 	{ 0 },		// UInt8									___filler30[2];
+ 	0x03F0,		// UInt16	lcdScreenWidth;				// $A08: Screen Width Register
+@@ -279,29 +279,29 @@
+ 	0x0000,		// UInt16	lcdCursorXPos;				// $A18: Cursor X Position
+ 	0x0000,		// UInt16	lcdCursorYPos;				// $A1A: Cursor Y Position
+ 	0x0101,		// UInt16	lcdCursorWidthHeight;		// $A1C: Cursor Width and Height
+-	{ 0 },		// UInt8									___filler32;
++	0,			// UInt8									___filler32;
+ 	0x7F,		// UInt8	lcdBlinkControl;			// $A1F: Blink Control Register
+ 	0x00,		// UInt8	lcdPanelControl;			// $A20: Panel Interface Configuration Register
+ 	0x00,		// UInt8	lcdPolarity;				// $A21: Polarity Config Register
+-	{ 0 },		// UInt8									___filler33;						
++	0,			// UInt8									___filler33;						
+ 	0x00,		// UInt8	lcdACDRate;					// $A23: ACD (M) Rate Control Register
+-	{ 0 },		// UInt8									___filler34;
++	0,			// UInt8									___filler34;
+ 	0x00,		// UInt8	lcdPixelClock;				// $A25: Pixel Clock Divider Register
+-	{ 0 },		// UInt8									___filler35;
++	0,			// UInt8									___filler35;
+ 	0x00,		// UInt8	lcdClockControl;			// $A27: Clocking Control Register
+ 	0x00FF,		// UInt16	lcdRefreshRateAdj;			// $A28: Refresh Rate Adjustment Register
+-	{ 0 },		// UInt8									___filler37;
++	0,			// UInt8									___filler37;
+ 	0x00,		// UInt8	lcdReserved1;				// $A2B: Reserved
+-	{ 0 },		// UInt8									___filler38;
++	0,			// UInt8									___filler38;
+ 	0x00,		// UInt8    lcdPanningOffset;			// $A2D: Panning Offset Register
+ 
+ 	{ 0 },		// UInt8									___filler39[0xA31-0xA2E];
+ 
+ 	0x00,		// UInt8	lcdFrameRate;				// $A31: Frame Rate Control Modulation Register
+-	{ 0 },		// UInt8									___filler2004;
++	0,			// UInt8									___filler2004;
+ 	0x84,		// UInt8	lcdGrayPalette;				// $A33: Gray Palette Mapping Register
+ 	0x00,		// UInt8	lcdReserved2;				// $A34: Reserved
+-	{ 0 },		// UInt8									___filler2005;
++	0,			// UInt8									___filler2005;
+ 	0x0000,		// UInt16	lcdContrastControlPWM;		// $A36: Contrast Control
+ 	0x00,		// UInt8	lcdRefreshModeControl;		// $A38: Refresh Mode Control Register
+ 	0x62,		// UInt8	lcdDMAControl;				// $A39: DMA Control Register
+diff -Naur orig-Emulator_Src_3.5/SrcShared/Hardware/EmRegsVZHandEra330.cpp Emulator_Src_3.5/SrcShared/Hardware/EmRegsVZHandEra330.cpp
+--- orig-Emulator_Src_3.5/SrcShared/Hardware/EmRegsVZHandEra330.cpp	Sat Mar 30 01:11:19 2002
++++ Emulator_Src_3.5/SrcShared/Hardware/EmRegsVZHandEra330.cpp	Thu May  5 18:57:44 2005
+@@ -588,14 +588,14 @@
+ 
+     // SD support
+ 	this->SetHandler((ReadFunction)&EmRegsVZHandEra330::spiRxDRead,
+-                         (WriteFunction)&EmRegsVZ::StdWrite,
++                         (WriteFunction)&EmRegsVZHandEra330::StdWrite,
+ 	                 addressof(spiRxD),
+ 	                 sizeof(UInt16));
+-	this->SetHandler((ReadFunction)&EmRegsVZ::StdRead,
++	this->SetHandler((ReadFunction)&EmRegsVZHandEra330::StdRead,
+                          (WriteFunction)&EmRegsVZHandEra330::spiTxDWrite,
+ 	                 addressof(spiTxD),
+ 	                 sizeof(UInt16));
+-	this->SetHandler((ReadFunction)&EmRegsVZ::StdRead,
++	this->SetHandler((ReadFunction)&EmRegsVZHandEra330::StdRead,
+                          (WriteFunction)&EmRegsVZHandEra330::spiCont1Write,
+ 	                 addressof(spiCont1),
+ 	                 sizeof(UInt16));
+diff -Naur orig-Emulator_Src_3.5/SrcShared/Hardware/EmRegsVZPalmM505.cpp Emulator_Src_3.5/SrcShared/Hardware/EmRegsVZPalmM505.cpp
+--- orig-Emulator_Src_3.5/SrcShared/Hardware/EmRegsVZPalmM505.cpp	Sat Mar 30 01:11:19 2002
++++ Emulator_Src_3.5/SrcShared/Hardware/EmRegsVZPalmM505.cpp	Thu May  5 18:57:58 2005
+@@ -50,7 +50,7 @@
+ 
+ 	// Now add standard/specialized handers for the defined registers.
+ 
+-	this->SetHandler ((ReadFunction) &EmRegsVZ::StdRead,
++	this->SetHandler ((ReadFunction) &EmRegsVZPalmM505::StdRead,
+ 		(WriteFunction) &EmRegsVZPalmM505::portFSelectWrite,
+ 		addressof (portFSelect), sizeof (f68VZ328Regs.portFSelect));
+ }
+diff -Naur orig-Emulator_Src_3.5/SrcShared/HostControl.h Emulator_Src_3.5/SrcShared/HostControl.h
+--- orig-Emulator_Src_3.5/SrcShared/HostControl.h	Sat Mar 30 01:11:15 2002
++++ Emulator_Src_3.5/SrcShared/HostControl.h	Thu Mar 17 14:23:22 2005
+@@ -293,6 +293,7 @@
+ 
+ 	// * HostDirEntType
+ 
++#undef  HOST_NAME_MAX  // Avoid conflicts with the POSIX macro
+ #define HOST_NAME_MAX	255
+ 
+ struct HostDirEntType
+diff -Naur orig-Emulator_Src_3.5/SrcUnix/EmDocumentUnix.cpp Emulator_Src_3.5/SrcUnix/EmDocumentUnix.cpp
+--- orig-Emulator_Src_3.5/SrcUnix/EmDocumentUnix.cpp	Sat Mar 30 01:11:19 2002
++++ Emulator_Src_3.5/SrcUnix/EmDocumentUnix.cpp	Thu Mar 17 14:04:57 2005
+@@ -95,7 +95,7 @@
+ 	string	fullPath = destRef.GetFullPath ();
+ 	char*	fNameExt = (char*) malloc (fullPath.size () + 4);
+ 	strcpy (fNameExt, fullPath.c_str ());
+-	filename_setext (fNameExt, ".ppm");
++	fl_filename_setext (fNameExt, ".ppm");
+ 
+ 	FILE* f = fopen (fNameExt, "wb");
+ 	if (f)
+diff -Naur orig-Emulator_Src_3.5/SrcUnix/espws-2.0/FileBrowser.cxx Emulator_Src_3.5/SrcUnix/espws-2.0/FileBrowser.cxx
+--- orig-Emulator_Src_3.5/SrcUnix/espws-2.0/FileBrowser.cxx	Sat Mar 30 01:11:11 2002
++++ Emulator_Src_3.5/SrcUnix/espws-2.0/FileBrowser.cxx	Thu Mar 17 13:59:02 2005
+@@ -465,9 +465,9 @@
+     else if (filename[i] != '/' && filename[i] != '\\')
+       strcat(filename, "/");
+ 
+-    num_files = filename_list(filename, &files);
++    num_files = fl_filename_list(filename, &files);
+ #else
+-    num_files = filename_list(directory_, &files);
++    num_files = fl_filename_list(directory_, &files);
+ #endif /* WIN32 || __EMX__ */
+ 
+     if (num_files <= 0)
+@@ -480,8 +480,8 @@
+       {
+ 	sprintf(filename, "%s/%s", directory_, files[i]->d_name);
+ 
+-	if (filename_isdir(filename) ||
+-            filename_match(files[i]->d_name, pattern_))
++	if (fl_filename_isdir(filename) ||
++            fl_filename_match(files[i]->d_name, pattern_))
+           add(files[i]->d_name, FileIcon::find(filename));
+       }
+ 
+diff -Naur orig-Emulator_Src_3.5/SrcUnix/espws-2.0/FileChooser2.cxx Emulator_Src_3.5/SrcUnix/espws-2.0/FileChooser2.cxx
+--- orig-Emulator_Src_3.5/SrcUnix/espws-2.0/FileChooser2.cxx	Sat Mar 30 01:11:11 2002
++++ Emulator_Src_3.5/SrcUnix/espws-2.0/FileChooser2.cxx	Thu Mar 17 14:00:25 2005
+@@ -83,7 +83,7 @@
+ #else
+     if (d[0] != '/' && d[0] != '\\')
+ #endif /* WIN32 || __EMX__ */
+-      filename_absolute(directory_, d);
++      fl_filename_absolute(directory_, d);
+     else
+     {
+       strncpy(directory_, d, sizeof(directory_) - 1);
+@@ -170,7 +170,7 @@
+       pathname[sizeof(pathname) - 1] = '\0';
+     }
+ 
+-    if (filename_isdir(pathname) && !directory_chooser_)
++    if (fl_filename_isdir(pathname) && !directory_chooser_)
+       return (0);
+     else
+       return (1);
+@@ -189,7 +189,7 @@
+ 	pathname[sizeof(pathname) - 1] = '\0';
+       }
+ 
+-      if (!filename_isdir(pathname) || directory_chooser_)
++      if (!fl_filename_isdir(pathname) || directory_chooser_)
+ 	count ++;
+     }
+ 
+@@ -237,7 +237,7 @@
+       name = fileList->text(i);
+       sprintf(pathname, "%s/%s", directory_, name);
+ 
+-      if (!filename_isdir(pathname) || directory_chooser_)
++      if (!fl_filename_isdir(pathname) || directory_chooser_)
+       {
+         // Nope, see if this this is "the one"...
+ 	count ++;
+@@ -264,7 +264,7 @@
+ 
+ 
+   // See if the filename is actually a directory...
+-  if (filename == NULL || filename_isdir(filename))
++  if (filename == NULL || fl_filename_isdir(filename))
+   {
+     // Yes, just change the current directory...
+     directory(filename);
+@@ -422,9 +422,9 @@
+   {
+ #if defined(WIN32) || defined(__EMX__)
+     if ((strlen(pathname) == 2 && pathname[1] == ':') ||
+-        filename_isdir(pathname))
++        fl_filename_isdir(pathname))
+ #else
+-    if (filename_isdir(pathname))
++    if (fl_filename_isdir(pathname))
+ #endif /* WIN32 || __EMX__ */
+     {
+       directory(pathname);
+@@ -437,7 +437,7 @@
+   {
+     fileName->value(filename);
+ 
+-    if (!filename_isdir(pathname) || directory_chooser_)
++    if (!fl_filename_isdir(pathname) || directory_chooser_)
+       okButton->activate();
+   }
+ }
+@@ -498,9 +498,9 @@
+ 
+ #if defined(WIN32) || defined(__EMX__)
+     if (((strlen(pathname) == 2 && pathname[1] == ':') ||
+-        filename_isdir(pathname)) && !directory_chooser_)
++        fl_filename_isdir(pathname)) && !directory_chooser_)
+ #else
+-    if (filename_isdir(pathname) && !directory_chooser_)
++    if (fl_filename_isdir(pathname) && !directory_chooser_)
+ #endif /* WIN32 || __EMX__ */
+       directory(pathname);
+     else if (type_ == CREATE || access(pathname, 0) == 0)
+@@ -632,7 +632,7 @@
+     sprintf(pathname, "%s/%s", directory_, fileName->value());
+ 
+     if ((type_ == CREATE || access(pathname, 0) == 0) &&
+-        (!filename_isdir(pathname) || directory_chooser_))
++        (!fl_filename_isdir(pathname) || directory_chooser_))
+       okButton->activate();
+     else
+       okButton->deactivate();
+diff -Naur orig-Emulator_Src_3.5/SrcUnix/espws-2.0/FileIcon.cxx Emulator_Src_3.5/SrcUnix/espws-2.0/FileIcon.cxx
+--- orig-Emulator_Src_3.5/SrcUnix/espws-2.0/FileIcon.cxx	Sat Mar 30 01:11:11 2002
++++ Emulator_Src_3.5/SrcUnix/espws-2.0/FileIcon.cxx	Thu Mar 17 14:00:58 2005
+@@ -230,7 +230,7 @@
+   // is found...
+   for (current = first_; current != (FileIcon *)0; current = current->next_)
+     if ((current->type_ == filetype || current->type_ == ANY) &&
+-        filename_match(filename, current->pattern_))
++        fl_filename_match(filename, current->pattern_))
+       break;
+ 
+   // Return the match (if any)...
+@@ -472,7 +472,7 @@
+   const char	*ext;		// File extension
+ 
+ 
+-  if ((ext = filename_ext(f)) == NULL)
++  if ((ext = fl_filename_ext(f)) == NULL)
+   {
+     fprintf(stderr, "FileIcon::load(): Unknown file type for \"%s\".\n", f);
+     return;
+@@ -1089,7 +1089,7 @@
+ 
+ 
+   entries = (dirent **)0;
+-  n       = filename_list(directory, &entries);
++  n       = fl_filename_list(directory, &entries);
+ 
+   for (i = 0; i < n; i ++)
+   {
+@@ -1099,7 +1099,7 @@
+       strcat(full,"/");
+       strcat(full, entries[i]->d_name);
+ 
+-      if (filename_isdir(full))
++      if (fl_filename_isdir(full))
+ 	load_kde_icons(full);
+       else
+ 	load_kde_mimelnk(full);				
+diff -Naur orig-Emulator_Src_3.5/SrcUnix/espws-2.0/FileIcon.h Emulator_Src_3.5/SrcUnix/espws-2.0/FileIcon.h
+--- orig-Emulator_Src_3.5/SrcUnix/espws-2.0/FileIcon.h	Sat Mar 30 01:11:11 2002
++++ Emulator_Src_3.5/SrcUnix/espws-2.0/FileIcon.h	Sat May  7 13:13:56 2005
+@@ -99,12 +99,6 @@
+ 
+ #define _FL_ICON_LABEL	FL_FREE_LABELTYPE
+ 
+-#if FL_MAJOR_VERSION == 1 && FL_MINOR_VERSION == 0
+-// FLTK 1.0.x defined these functions without the "fl_" prefix.
+-#define fl_contrast contrast
+-#define fl_inactive inactive
+-#endif
+-
+ #endif // !_GUI_FILEICON_H_
+ 
+ //

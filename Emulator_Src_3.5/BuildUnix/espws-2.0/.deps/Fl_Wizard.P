@@ -1,0 +1,14 @@
+Fl_Wizard.o: ../../SrcUnix/espws-2.0/Fl_Wizard.cxx \
+ ../../SrcUnix/espws-2.0/Fl_Wizard.h \
+ /media/linux/fltk-1.1.10/binaries/include/FL/Fl_Group.H \
+ /media/linux/fltk-1.1.10/binaries/include/FL/Fl_Widget.H \
+ /media/linux/fltk-1.1.10/binaries/include/FL/Enumerations.H \
+ /media/linux/fltk-1.1.10/binaries/include/FL/Fl_Export.H \
+ /media/linux/fltk-1.1.10/binaries/include/FL/fl_draw.H
+../../SrcUnix/espws-2.0/Fl_Wizard.cxx :
+../../SrcUnix/espws-2.0/Fl_Wizard.h :
+/media/linux/fltk-1.1.10/binaries/include/FL/Fl_Group.H :
+/media/linux/fltk-1.1.10/binaries/include/FL/Fl_Widget.H :
+/media/linux/fltk-1.1.10/binaries/include/FL/Enumerations.H :
+/media/linux/fltk-1.1.10/binaries/include/FL/Fl_Export.H :
+/media/linux/fltk-1.1.10/binaries/include/FL/fl_draw.H :

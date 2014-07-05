@@ -1,0 +1,119 @@
+cpudefs.o: ../SrcShared/UAE/cpudefs.c ../SrcShared/UAE/sysconfig.h \
+ /mnt/utmp/codeblocks/usr/include/string.h \
+ /mnt/utmp/codeblocks/usr/include/features.h \
+ /mnt/utmp/codeblocks/usr/include/sys/cdefs.h \
+ /mnt/utmp/codeblocks/usr/include/bits/wordsize.h \
+ /mnt/utmp/codeblocks/usr/include/gnu/stubs.h \
+ /mnt/utmp/codeblocks/usr/lib/gcc/armv7l-unknown-linux-gnueabi/4.8.2/include/stddef.h \
+ /mnt/utmp/codeblocks/usr/include/bits/string.h \
+ /mnt/utmp/codeblocks/usr/include/bits/string2.h \
+ /mnt/utmp/codeblocks/usr/include/stdlib.h ../SrcShared/UAE/sysdeps.h \
+ /mnt/utmp/codeblocks/usr/include/stdio.h \
+ /mnt/utmp/codeblocks/usr/include/bits/types.h \
+ /mnt/utmp/codeblocks/usr/include/bits/typesizes.h \
+ /mnt/utmp/codeblocks/usr/include/libio.h \
+ /mnt/utmp/codeblocks/usr/include/_G_config.h \
+ /mnt/utmp/codeblocks/usr/include/wchar.h \
+ /mnt/utmp/codeblocks/usr/lib/gcc/armv7l-unknown-linux-gnueabi/4.8.2/include/stdarg.h \
+ /mnt/utmp/codeblocks/usr/include/bits/stdio_lim.h \
+ /mnt/utmp/codeblocks/usr/include/bits/sys_errlist.h \
+ /mnt/utmp/codeblocks/usr/include/bits/stdio.h \
+ /mnt/utmp/codeblocks/usr/include/sys/types.h \
+ /mnt/utmp/codeblocks/usr/include/time.h \
+ /mnt/utmp/codeblocks/usr/include/endian.h \
+ /mnt/utmp/codeblocks/usr/include/bits/endian.h \
+ /mnt/utmp/codeblocks/usr/include/bits/byteswap.h \
+ /mnt/utmp/codeblocks/usr/include/sys/select.h \
+ /mnt/utmp/codeblocks/usr/include/bits/select.h \
+ /mnt/utmp/codeblocks/usr/include/bits/sigset.h \
+ /mnt/utmp/codeblocks/usr/include/bits/time.h \
+ /mnt/utmp/codeblocks/usr/include/sys/sysmacros.h \
+ /mnt/utmp/codeblocks/usr/include/bits/pthreadtypes.h \
+ /mnt/utmp/codeblocks/usr/include/alloca.h \
+ /mnt/utmp/codeblocks/usr/include/errno.h \
+ /mnt/utmp/codeblocks/usr/include/bits/errno.h \
+ /mnt/utmp/codeblocks/usr/include/linux/errno.h \
+ /mnt/utmp/codeblocks/usr/include/asm/errno.h \
+ /mnt/utmp/codeblocks/usr/include/asm-generic/errno.h \
+ /mnt/utmp/codeblocks/usr/include/asm-generic/errno-base.h \
+ /mnt/utmp/codeblocks/usr/include/assert.h \
+ /mnt/utmp/codeblocks/usr/include/limits.h \
+ /mnt/utmp/codeblocks/usr/lib/gcc/armv7l-unknown-linux-gnueabi/4.8.2/include-fixed/limits.h \
+ /mnt/utmp/codeblocks/usr/include/bits/posix1_lim.h \
+ /mnt/utmp/codeblocks/usr/include/bits/local_lim.h \
+ /mnt/utmp/codeblocks/usr/include/linux/limits.h \
+ /mnt/utmp/codeblocks/usr/include/bits/posix2_lim.h \
+ ../SrcShared/EmTypes.h /mnt/utmp/codeblocks/usr/include/strings.h \
+ /mnt/utmp/codeblocks/usr/include/unistd.h \
+ /mnt/utmp/codeblocks/usr/include/bits/posix_opt.h \
+ /mnt/utmp/codeblocks/usr/include/bits/confname.h \
+ /mnt/utmp/codeblocks/usr/include/getopt.h \
+ /mnt/utmp/codeblocks/usr/include/fcntl.h \
+ /mnt/utmp/codeblocks/usr/include/bits/fcntl.h \
+ /mnt/utmp/codeblocks/usr/include/sys/time.h \
+ /mnt/utmp/codeblocks/usr/include/dirent.h \
+ /mnt/utmp/codeblocks/usr/include/bits/dirent.h ../SrcShared/UAE/target.h \
+ ../SrcShared/UAE/config.h ../SrcShared/UAE/options.h \
+ ../SrcShared/UAE/readcpu.h
+../SrcShared/UAE/cpudefs.c :
+../SrcShared/UAE/sysconfig.h :
+/mnt/utmp/codeblocks/usr/include/string.h :
+/mnt/utmp/codeblocks/usr/include/features.h :
+/mnt/utmp/codeblocks/usr/include/sys/cdefs.h :
+/mnt/utmp/codeblocks/usr/include/bits/wordsize.h :
+/mnt/utmp/codeblocks/usr/include/gnu/stubs.h :
+/mnt/utmp/codeblocks/usr/lib/gcc/armv7l-unknown-linux-gnueabi/4.8.2/include/stddef.h :
+/mnt/utmp/codeblocks/usr/include/bits/string.h :
+/mnt/utmp/codeblocks/usr/include/bits/string2.h :
+/mnt/utmp/codeblocks/usr/include/stdlib.h :
+../SrcShared/UAE/sysdeps.h :
+/mnt/utmp/codeblocks/usr/include/stdio.h :
+/mnt/utmp/codeblocks/usr/include/bits/types.h :
+/mnt/utmp/codeblocks/usr/include/bits/typesizes.h :
+/mnt/utmp/codeblocks/usr/include/libio.h :
+/mnt/utmp/codeblocks/usr/include/_G_config.h :
+/mnt/utmp/codeblocks/usr/include/wchar.h :
+/mnt/utmp/codeblocks/usr/lib/gcc/armv7l-unknown-linux-gnueabi/4.8.2/include/stdarg.h :
+/mnt/utmp/codeblocks/usr/include/bits/stdio_lim.h :
+/mnt/utmp/codeblocks/usr/include/bits/sys_errlist.h :
+/mnt/utmp/codeblocks/usr/include/bits/stdio.h :
+/mnt/utmp/codeblocks/usr/include/sys/types.h :
+/mnt/utmp/codeblocks/usr/include/time.h :
+/mnt/utmp/codeblocks/usr/include/endian.h :
+/mnt/utmp/codeblocks/usr/include/bits/endian.h :
+/mnt/utmp/codeblocks/usr/include/bits/byteswap.h :
+/mnt/utmp/codeblocks/usr/include/sys/select.h :
+/mnt/utmp/codeblocks/usr/include/bits/select.h :
+/mnt/utmp/codeblocks/usr/include/bits/sigset.h :
+/mnt/utmp/codeblocks/usr/include/bits/time.h :
+/mnt/utmp/codeblocks/usr/include/sys/sysmacros.h :
+/mnt/utmp/codeblocks/usr/include/bits/pthreadtypes.h :
+/mnt/utmp/codeblocks/usr/include/alloca.h :
+/mnt/utmp/codeblocks/usr/include/errno.h :
+/mnt/utmp/codeblocks/usr/include/bits/errno.h :
+/mnt/utmp/codeblocks/usr/include/linux/errno.h :
+/mnt/utmp/codeblocks/usr/include/asm/errno.h :
+/mnt/utmp/codeblocks/usr/include/asm-generic/errno.h :
+/mnt/utmp/codeblocks/usr/include/asm-generic/errno-base.h :
+/mnt/utmp/codeblocks/usr/include/assert.h :
+/mnt/utmp/codeblocks/usr/include/limits.h :
+/mnt/utmp/codeblocks/usr/lib/gcc/armv7l-unknown-linux-gnueabi/4.8.2/include-fixed/limits.h :
+/mnt/utmp/codeblocks/usr/include/bits/posix1_lim.h :
+/mnt/utmp/codeblocks/usr/include/bits/local_lim.h :
+/mnt/utmp/codeblocks/usr/include/linux/limits.h :
+/mnt/utmp/codeblocks/usr/include/bits/posix2_lim.h :
+../SrcShared/EmTypes.h :
+/mnt/utmp/codeblocks/usr/include/strings.h :
+/mnt/utmp/codeblocks/usr/include/unistd.h :
+/mnt/utmp/codeblocks/usr/include/bits/posix_opt.h :
+/mnt/utmp/codeblocks/usr/include/bits/confname.h :
+/mnt/utmp/codeblocks/usr/include/getopt.h :
+/mnt/utmp/codeblocks/usr/include/fcntl.h :
+/mnt/utmp/codeblocks/usr/include/bits/fcntl.h :
+/mnt/utmp/codeblocks/usr/include/sys/time.h :
+/mnt/utmp/codeblocks/usr/include/dirent.h :
+/mnt/utmp/codeblocks/usr/include/bits/dirent.h :
+../SrcShared/UAE/target.h :
+../SrcShared/UAE/config.h :
+../SrcShared/UAE/options.h :
+../SrcShared/UAE/readcpu.h :
