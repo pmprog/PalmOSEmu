@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PXML xmlns="http://openpandora.org/namespaces/PXML">
+	<package id="palmosemulator.marovada">
+		<author name="marovada"/>
+		<version major="1" minor="0" release="2" build="0"/>
+		<titles>
+			<title lang="en_US">PalmOS Emulator</title>
+		</titles>
+		<descriptions>
+			<description lang="en_US">Emulates Motorola 68k PalmOS devices.
+Roms can be placed anywhere, though the appdata folder is the default location.
+When installing PRC and PDB files, the progress bar will fill, but the window will stay open until you click it.
+After installing PRC and PDB files, you need to run the HotSync program from the Palm's home screen for them to appear in the list
+Port done by marovada, packed and skinned by pmprog</description>
+		</descriptions>
+		<icon src="./palm_os.png"/>
+	</package>
+	<application id="palmosemulator.marovada">
+		<exec command="./pose"/>
+		<author name="marovada"/>
+		<version major="1" minor="0" release="0" build="0"/>
+		<titles>
+			<title lang="en_US">PalmOS Emulator</title>
+		</titles>
+		<descriptions>
+			<description lang="en_US">Emulates Motorola 68k PalmOS devices.
+Roms can be placed anywhere, though the appdata folder is the default location.
+When installing PRC and PDB files, the progress bar will fill, but the window will stay open until you click it.
+After installing PRC and PDB files, you need to run the HotSync program from the Palm's home screen for them to appear in the list
+Port done by marovada, packed and skinned by pmprog</description>
+		</descriptions>
+		<!--Extra block for compatibility with OS versions before HF6-->
+		<title lang="en_US">PalmOS Emulator</title>
+		<description lang="en_US">Emulates Motorola 68k PalmOS devices.
+Roms can be placed anywhere, though the appdata folder is the default location.
+When installing PRC and PDB files, the progress bar will fill, but the window will stay open until you click it.
+After installing PRC and PDB files, you need to run the HotSync program from the Palm's home screen for them to appear in the list
+Port done by marovada, packed and skinned by pmprog</description>
+		<!--END Extra block-->
+		<icon src="./palm_os.png"/>
+		<licenses>
+			<license name="GNU GPL v2" url="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html" sourcecodeurl="https://github.com/pmprog/PalmOSEmu"/>
+		</licenses>
+		<icon src="./palm_os.png"/>
+		<previewpics>
+			<pic src="./Skins/Generic/Pandora_32.jpg"/>
+		</previewpics>
+		<categories>
+			<category name="System">
+				<subcategory name="Emulator"/>
+			</category>
+		</categories>
+	</application>
+	<!--Created with the PXMLCreator of PNDTools v.0.7.0-->
+</PXML>

@@ -1,0 +1,21 @@
+# This is a skin file for the Palm OS Emulator.  See the ReadMe.txt
+# file in this directory for a description of its contents.
+
+Name			= Pandora
+File1x			= Pandora_16.jpg
+File2x			= Pandora_32.jpg
+BackgroundColor		= 0x7B, 0x8C, 0x5A
+HighlightColor		= 0x64, 0xF0, 0xDC
+Devices			= HandEra330, HandEra330, TRGpro, Treo270, Treo90, Treog180, Treok180, Treok180, Treok180, Visor, VisorEdge, VisorNeo, VisorPlatinum, VisorPrism, VisorPro, Palmi705, PalmIII, PalmIIIc, PalmIIIe, PalmIIIx, PalmM100, Palmm130, PalmM500, PalmM505, Palmm515, PalmPilotPersonal, PalmPilotProfessional, PalmV, PalmVx, PalmVII, PalmVIIEZ, PalmVIIx, Pilot1000, Pilot5000, Symbol1500, Symbol1700
+
+#						  x    y    w    h
+#						---- ---- ---- ----
+Element1		= PowerButton,		165,   2,  30, 30
+Element2		= UpButton,		    169, 117,  26,  14
+Element3		= DownButton,		169, 121,  26,  14
+Element4		= App1Button,		169,  39,  26,  26
+Element5		= App2Button,		169,  67,  26,  26
+Element6		= App3Button,		169, 137,  26,  26
+Element7		= App4Button,		169, 170,  26,  26
+Element8		= Touchscreen,		  1,   1, 160, 220
+Element9		= LCD,			      1,   1, 160, 160
